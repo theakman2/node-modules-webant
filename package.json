@@ -1,0 +1,15 @@
+{
+  "name": "webant2",
+  "version": "0.0.0",
+  "description": "",
+  "main": "./lib/improvedWebant.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "A Kazim",
+  "license": "MIT",
+  "dependencies": {
+    "async": "~0.2.9",
+    "uglify-js": "~2.4.0"
+  }
+}

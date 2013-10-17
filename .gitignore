@@ -1,0 +1,5 @@
+/node_modules
+/npm-debug.log
+.svn
+.project
+.node-build.js.swpwebant-config.json
