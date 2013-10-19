@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+var webant = require("../lib/webant");
+
+if (process.argv.length > 2) {
+    var config = require(process.argv[2]);
+} else {
+    var config = require(process.cwd()+"/webant-config.json");
+}
+
+webant(config,process.stdout);
