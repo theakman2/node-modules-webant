@@ -1,6 +1,7 @@
 var testObjs = [
 	require("./getConfig.js"),
-	require("./extend.js")
+	require("./extend.js"),
+	require("./getRequires.js")
 ];
 
 var tests = {};
