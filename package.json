@@ -1,15 +1,41 @@
 {
-  "name": "webant2",
-  "version": "0.0.0",
-  "description": "",
-  "main": "./lib/improvedWebant.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "A Kazim",
-  "license": "MIT",
-  "dependencies": {
-    "async": "~0.2.9",
-    "uglify-js": "~2.4.0"
-  }
+    "name": "webant2",
+    "version": "0.1.0",
+    "description": "Bringing CommonJS-style requires to the browser and more.",
+    "keywords":[
+       "ant",
+       "browser",
+       "browserify",
+       "build",
+       "builder",
+       "bundle",
+       "bundler",
+       "cjs",
+       "commonjs",
+       "deploy",
+       "generator",
+       "make",
+       "modules",
+       "package",
+       "packager",
+       "require",
+       "requirejs",
+       "web",
+       "webant",
+       "webmake"
+    ],
+    "author": "A Kazim",
+    "license": "MIT",
+    "dependencies": {
+        "async": "~0.2.9",
+        "uglify-js": "~2.4.0"
+    },
+    "devDependencies": {
+        "test": "0.6.x"
+    },
+    "bin": "./bin/webant",
+    "main": "./lib/webant",
+    "scripts": {
+        "test": "node ./test/index.js"
+    }
 }
