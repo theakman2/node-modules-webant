@@ -8,11 +8,11 @@ Unlike node-js though, webant allows you to import CSS files, JSON files, handle
 
 ## Quick Start
 
-1. Install the package globally.
+* Install the package globally.
 
     $ npm install webant -g
     
-2. Create a file named `webant-config.json` in your project root and define at least the following settings:
+* Create a file named `webant-config.json` in your project root and define at least the following settings:
 
 ````json
 {
@@ -21,7 +21,7 @@ Unlike node-js though, webant allows you to import CSS files, JSON files, handle
 }
 ````
 
-3. Navigate to the directory housing your `webant-config.json` and run `webant`:
+* Navigate to the directory housing your `webant-config.json` and run `webant`:
 
     $ cd /path/to/project/root
     $ webant
@@ -32,10 +32,10 @@ Unlike node-js though, webant allows you to import CSS files, JSON files, handle
     
 ## Acknowledgements
 
-*[medikoo](https://github.com/medikoo), creator of [webmake](https://github.com/medikoo/modules-webmake)*
+__[medikoo](https://github.com/medikoo), creator of [webmake](https://github.com/medikoo/modules-webmake)__
 
 For the inspiration behind this module.
 
-*[mishoo](https://github.com/mishoo), creator of [UglifyJS2](https://github.com/mishoo/UglifyJS2)*
+__[mishoo](https://github.com/mishoo), creator of [UglifyJS2](https://github.com/mishoo/UglifyJS2)__
 
 The excellent javascript parser, minifier, compressor and beautifier that webant depends on for much of its functionality.
