@@ -33,16 +33,14 @@
         "uglify-js": "~2.4.0",
         "webant-handler-css": "0.3.x",
         "webant-handler-external": "0.3.x",
-        "webant-handler-hbs": "0.3.x",
-        "webant-handler-js": "0.3.x",
-        "webant-handler-json": "0.3.x",
-        "webant-handler-less": "0.3.x",
-        "webant-handler-scss": "0.3.x",
-        "webant-handler-stylus": "0.3.x",
-        "webant-handler-text": "0.3.x"
+        "webant-handler-js": "0.3.x"
     },
     "devDependencies": {
         "test": "0.6.x"
+    },
+    "repositories":{
+        "type":"git",
+        "url":"git://github.com/theakman2/node-modules-webant.git"
     },
     "bin": "./bin/webant",
     "main": "./lib/webant",
