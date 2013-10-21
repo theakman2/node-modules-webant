@@ -15,48 +15,7 @@
 		return module.exports;
 	}
 	require("~");
-})({'0':function(require,module,exports) {
-alert("I'm last!!");
-},
-'1':function(require,module,exports) {
-require("./again/e.js");
-},
-'2':function(require,module,exports) {
-require("./d.js");
-var again = require("./again/e.js");
-},
-'3':function(require,module,exports) {
-var foo = require("nested/c.js");
-module.exports = 5;
-},
-'6':function(require,module,exports) {
-require("e.js");
-},
-'7':function(require,module,exports) {
-/**
- * Taken verbatim from medikoo's node webmake module (https://github.com/medikoo/modules-webmake)
- **/
-var style, add;
-if (document.createStyleSheet) {
-        // IE
-        if (document.styleSheets.length > 29) {
-                style = document.styleSheets[document.styleSheets.length - 1];
-        } else {
-                style = document.createStyleSheet();
-        }
-        add = function (css) { style.cssText += css; };
-} else {
-        style = document.getElementsByTagName("head")[0]
-                .appendChild(document.createElement("style"));
-        style.setAttribute("type", "text/css");
-        add = function (css) { style.appendChild(document.createTextNode(css)); };
-}
-module.exports = add;
-},
-'8':function(require,module,exports) {
-require("@@css/addStylesheet").add("body {\n    color:red;\n}\n");
-},
-'9':function(require,module,exports) {
+})({'3':function(require,module,exports) {
 /*
 
 Copyright (C) 2011 by Yehuda Katz
@@ -420,8 +379,9 @@ Handlebars.template = Handlebars.VM.template;
 })(Handlebars);
 ;
 
+module.exports = Handlebars;
 },
-'10':function(require,module,exports) {
+'4':function(require,module,exports) {
 module.exports = require('@@hbs/runtime').template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
@@ -437,54 +397,122 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   });
 },
 '5':function(require,module,exports) {
-require("nested/c.js");
+//=>require ../../scss/2.scss
+//=>require ../../scss/3.less
+//=>require ../../scss/4.styl
 
-var b = require("./nested/again/f.js");
+this.foo = function() {
+	return "foo";
+};
 
-require("./styles.css");
+var template = require("../../views/1.hbs");
 
-require("1.hbs");
+module.exports.bar = function() {
+	return "bar";
+};
+
+exports.tmpl = template;
 },
-'4':function(require,module,exports) {
-var five = 5;
-var six = 6;
+'8':function(require,module,exports) {
+module.exports = "Text goes here.\n\nA few newlines.\n\nEven allows for dan'ger'ou\"s charac>ters!";
+},
+'10':function(require,module,exports) {
+module.exports = "<p>\n    Here is a <strong>strong</strong> tag with some <em>emphasis</em>!\n</p>";
+},
+'9':function(require,module,exports) {
+// require some text
+var text = require("../../data/plain.txt");
 
-require("./a.js");
-var seven = require("./b.js");
+// require some html
+var html = require("../../data/snippetof.html");
 
 
+// require external JS file with protocol and no query string/anchor
+//=>require http://google.com/a.js
+
+
+
+// require external JS file with protocol and query string but no anchor
+//=>require http://localhost/path/to/b.js?hey=there
+
+
+
+// require external JS file with protocol and query string and anchor
+//=>require http://mysite.com/another/external/c.js?hey=there#pie
+
+
+// require external JS file that has already been required
+//=>require http://localhost/path/to/b.js?hey=there
+
+
+
+// require external CSS file with protocol and no query string/anchor
+//=>require http://localhost/path/to/some/css/a.css
+
+
+
+// require external CSS file with protocol and query string but no anchor
+//=>require http://www.yoursite.biz/assets/b.css
+
+
+
+// require external CSS file with protocol and query string and anchor
+//=>require http://www.another.site.co/assets/b.css
+
+
+
+// require external CSS file that has already been required
+//=>require http://localhost/path/to/some/css/a.css
+
+
+
+module.exports.text = text;
+module.exports.html = html;
+},
+'11':function(require,module,exports) {
+module.exports = {
+	"bar":[4,5,20,"foo"],
+	"anotherKey":{
+		"keyA":"valueA",
+		"keyB":{
+			"keyB1":5
+		}
+	}
+};
+},
+'6':function(require,module,exports) {
+var test = require("nested/test.js");
+
+//=>require ../scss/1.css
+
+var sink = require("./nested/kitchensink.js");
+
+//=>require //cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore.js
+
+__global.foo = test.foo();
+__global.bar = test.bar();
+__global.tmpl = test.tmpl({name:"Alan"});
+__global.data = require("../data/test.json");
+__global.text = sink.text;
+__global.html = sink.html;
 }
 },{
-    "1": {
-        "./again/e.js": "0"
-    },
-    "2": {
-        "./d.js": "1",
-        "./again/e.js": "0"
-    },
-    "3": {
-        "nested/c.js": "2"
-    },
     "4": {
-        "./a.js": "3",
-        "./b.js": "5"
+        "@@hbs/runtime": "3"
     },
     "5": {
-        "nested/c.js": "2",
-        "./nested/again/f.js": "6",
-        "./styles.css": "8",
-        "1.hbs": "10"
+        "../../views/1.hbs": "4"
     },
     "6": {
-        "e.js": "0"
+        "nested/test.js": "5",
+        "./nested/kitchensink.js": "9",
+        "../data/test.json": "11"
     },
-    "8": {
-        "@@css/addStylesheet": "7"
-    },
-    "10": {
-        "@@hbs/runtime": "9"
+    "9": {
+        "../../data/plain.txt": "8",
+        "../../data/snippetof.html": "10"
     },
     "~": {
-        "~": "4"
+        "~": "6"
     }
 });

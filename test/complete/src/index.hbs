@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Insert title here</title>
+{{#each externalCss}}<link rel="stylesheet" type="text/css" href="{{{this}}}" />{{/each}}
+{{#if internalCss}}<link rel="stylesheet" type="text/css" href="{{{relCssPath}}}" />{{/if}}
+{{#each externalJs}}<script type="text/javascript" src="{{{this}}}"></script>{{/each}}
+{{#if internalJs}}<script type="text/javascript" src="{{{relJsPath}}}"></script>{{/if}}
+</head>
+<body>
+
+!!!!!Testing!!!!!
+
+</body>
+</html>

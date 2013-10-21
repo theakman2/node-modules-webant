@@ -1,0 +1,11 @@
+@import "importme.less";
+
+.extendMe {
+	background:blue;
+}
+
+body {
+	.link:extend(.extendMe) {
+		color:darken(#f03,15%);
+	}
+}

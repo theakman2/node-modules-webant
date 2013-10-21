@@ -1,7 +1,8 @@
 var testObjs = [
 	require("./getConfig.js"),
 	require("./extend.js"),
-	require("./getRequires.js")
+	require("./getRequires.js"),
+	require("./webant.js")
 ];
 
 var tests = {};

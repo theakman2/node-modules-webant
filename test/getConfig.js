@@ -5,8 +5,8 @@ var getConfig = require("../lib/getConfig.js");
 exports["test getConfig"] = function(assert,done) {
 	var rawConfig = {
 		base:__dirname,
-	    jsEntryPath:"path/to/src/js/main.js",
-	    jsDestPath:"path/to/build/main.js"
+	    jsEntryPath:"%%base%%/path/to/src/js/main.js",
+	    jsDestPath:"%%base%%/path/to/build/main.js"
 	};
 	
 	var settings = getConfig(rawConfig);
@@ -15,8 +15,8 @@ exports["test getConfig"] = function(assert,done) {
 		rawConfig,
 		{
 			base:__dirname,
-			jsEntryPath:"path/to/src/js/main.js",
-			jsDestPath:"path/to/build/main.js"
+			jsEntryPath:"%%base%%/path/to/src/js/main.js",
+			jsDestPath:"%%base%%/path/to/build/main.js"
 		},
 		"Original configuration object should not have been mutated."
 	);
@@ -32,7 +32,8 @@ exports["test getConfig"] = function(assert,done) {
 					debugBasePath:__dirname,
 					mode:"normal"
 				},
-				internalCss:{}
+				css:{},
+				external:{}
 			}
 		},
 		"Defaults should have been merged in properly and appropriate paths resolved."
