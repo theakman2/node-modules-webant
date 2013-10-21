@@ -1,4 +1,4 @@
-var fs = require("fs");
+var fs = require("fs-extra");
 var path = require("path");
 var vm = require("vm");
 
@@ -39,11 +39,7 @@ function getScriptSources(html) {
 }
 
 exports["test webant"] = function(assert,done){
-	async.map([
-	           path.resolve(__dirname,"complete","build","main.js"),
-	           path.resolve(__dirname,"complete","build","main.css"),
-	           path.resolve(__dirname,"complete","build","index.html")
-   ],fs.unlink,function(err,results){
+	fs.remove(path.resolve(__dirname,"complete","build"),function(err,results){
 		if (err && (err.code !== "ENOENT")) {
 			throw err;
 		}

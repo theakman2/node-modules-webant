@@ -1,1 +1,18 @@
-[object Object],[object Object],[object Object],[object Object]
+html body {
+  background: magenta; }
+
+.mwaha {
+  font-style: italic;
+}
+.extendMe,
+body .link {
+  background: blue;
+}
+body .link {
+  color: #b30024;
+}
+.bla .hey {
+  font-weight: bold;
+}
+
+body { background:#ffaaaa; }
