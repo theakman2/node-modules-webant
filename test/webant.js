@@ -77,8 +77,8 @@ exports["test webant"] = function(assert,done){
 							}
 						}
 					},
-					text:"Text goes here.\n\nA few newlines.\n\nEven allows for dan'ger'ou\"s charac>ters!",
-					html:"<p>\n    Here is a <strong>strong</strong> tag with some <em>emphasis</em>!\n</p>"
+					text:"Text goes here. Even allows for dan'ger'ou\"s charac>ters!",
+					html:"<p>Here is a <strong>strong</strong> tag with some <em>emphasis</em>!</p>"
 				},
 				"compiled javascript should run properly"
 			);

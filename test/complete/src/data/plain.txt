@@ -1,5 +1,1 @@
-Text goes here.
-
-A few newlines.
-
-Even allows for dan'ger'ou"s charac>ters!
+Text goes here. Even allows for dan'ger'ou"s charac>ters!
