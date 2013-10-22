@@ -1,5 +1,13 @@
 language: node_js
 node_js:
-  - "0.11"
-  - "0.10"
-  - "0.8"
+- '0.11'
+- '0.10'
+- '0.8'
+deploy:
+  provider: npm
+  email: theakman2@hotmail.com
+  api_key:
+    secure: dFYHDa8z1wyPi59hgtUo5J63DHXhRzJFHHqKMwLbkwOVNYFGB0jq2Bj2fML509CCHDiYed3kIX8AMmqq1XO6FYuwVo9DCLT38KK5oTeQryLAB/Vaq/3yE38cpZqVjVwcGPx4Yp4ViQvy9Jn4g/iXfXYhql63+REe6url4MtvN8s=
+  on:
+    tags: true
+    repo: theakman2/node-modules-webant

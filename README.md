@@ -1,4 +1,5 @@
 # node-modules-webant
+[![Build Status](https://travis-ci.org/theakman2/node-modules-webant.png?branch=master)](https://travis-ci.org/theakman2/node-modules-webant)
 
 _Bringing CommonJS-style requires to the browser and more._
 
