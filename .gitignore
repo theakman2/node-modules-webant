@@ -1,5 +1,6 @@
 /node_modules
 /npm-debug.log
+/test/complete/build
 .svn
 .project
 .node-build.js.swpwebant-config.json

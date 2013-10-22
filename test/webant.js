@@ -47,7 +47,7 @@ exports["test webant"] = function(assert,done){
 			assert.strictEqual(err,null,"there should be no errors building this config");
 			
 			var listing = fs.readdirSync(path.resolve(__dirname,"complete","build"));
-			
+			listing.sort();
 			assert.deepEqual(
 				listing,
 				["index.html","main.css","main.js"],
