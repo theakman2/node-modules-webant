@@ -34,7 +34,8 @@ exports["test getConfig"] = function(assert,done) {
 				},
 				css:{},
 				external:{}
-			}
+			},
+			requireAliases:{}
 		},
 		"Defaults should have been merged in properly and appropriate paths resolved."
 	);
