@@ -8,13 +8,16 @@ Unlike node-js though, webant allows you to import CSS files, JSON files, handle
 
 ## Quick Start
 
-* Install the package globally.
+Install the package globally.
 
     $ npm install webant -g
 
-* Navigate to the directory housing your entry javascript file:
+Navigate to the directory housing your entry javascript file:
 
     $ cd /path/to/project/root
+    
+Run webant:
+
     $ webant src/js/main.js build/js/out.js
 
 ## Tests [![Build Status](https://travis-ci.org/theakman2/node-modules-webant.png?branch=master)](https://travis-ci.org/theakman2/node-modules-webant)
