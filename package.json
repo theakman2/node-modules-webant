@@ -31,7 +31,6 @@
         "handlebars": "1.0.x",
         "async": "~0.2.9",
         "uglify-js": "~2.4.0",
-        "optimist":"0.6.x",
         "webant-handler-css": "0.3.x",
         "webant-handler-external": "0.3.x",
         "webant-handler-hbs": "0.3.x",
