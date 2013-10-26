@@ -4,9 +4,8 @@ var getConfig = require("../lib/getConfig.js");
 
 exports["test getConfig"] = function(assert,done) {
 	var rawConfig = {
-		base:__dirname,
-	    jsEntryPath:"%%base%%/path/to/src/js/main.js",
-	    jsDestPath:"%%base%%/path/to/build/main.js"
+	    jsEntryPath:"/path/to/src/js/main.js",
+	    jsDestPath:"/path/to/build/main.js"
 	};
 	
 	var settings = getConfig(rawConfig);
@@ -14,9 +13,8 @@ exports["test getConfig"] = function(assert,done) {
 	assert.deepEqual(
 		rawConfig,
 		{
-			base:__dirname,
-			jsEntryPath:"%%base%%/path/to/src/js/main.js",
-			jsDestPath:"%%base%%/path/to/build/main.js"
+			jsEntryPath:"/path/to/src/js/main.js",
+			jsDestPath:"/path/to/build/main.js"
 		},
 		"Original configuration object should not have been mutated."
 	);
@@ -24,17 +22,21 @@ exports["test getConfig"] = function(assert,done) {
 	assert.deepEqual(
 		settings,
 		{
-			base:__dirname,
-			jsEntryPath:path.join(__dirname,"path","to","src","js","main.js"),
-			jsDestPath:path.join(__dirname,"path","to","build","main.js"),
-			handlers:{
+			jsEntryPath:"/path/to/src/js/main.js",
+			jsDestPath:"/path/to/build/main.js",
+		    handlers:{
+				css:{},
+				external:{},
+				hbs:{},
 				js:{
-					debugBasePath:__dirname,
 					mode:"normal"
 				},
-				css:{},
-				external:{}
-			},
+				json:{},
+				less:{},
+				scss:{},
+				stylus:{},
+				text:{}
+		    },
 			requireAliases:{}
 		},
 		"Defaults should have been merged in properly and appropriate paths resolved."

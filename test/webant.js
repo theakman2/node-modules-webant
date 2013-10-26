@@ -7,23 +7,11 @@ var async = require("async");
 var webant = require("../lib/webant.js");
 
 var rawConfig = {
-	"base":__dirname,
-    "jsEntryPath":"%%base%%/complete/src/js/main.js",
-    "jsDestPath":"%%base%%/complete/build/main.js",
-    "cssDestPath":"%%base%%/complete/build/main.css",
-    "htmlEntryPath":"%%base%%/complete/src/index.hbs",
-    "htmlDestPath":"%%base%%/complete/build/index.html",
-    "handlers":{
-        "css":{},
-        "scss":{},
-        "less":{},
-        "stylus":{},
-        "js":{},
-        "json":{},
-        "hbs":{},
-        "text":{},
-        "external":{}
-    }
+    jsEntryPath:__dirname+"/complete/src/js/main.js",
+    jsDestPath:__dirname+"/complete/build/main.js",
+    cssDestPath:__dirname+"/complete/build/main.css",
+    htmlEntryPath:__dirname+"/complete/src/index.hbs",
+    htmlDestPath:__dirname+"/complete/build/index.html"
 };
 
 function getLinkHrefs(html) {
@@ -43,7 +31,7 @@ exports["test webant"] = function(assert,done){
 		if (err && (err.code !== "ENOENT")) {
 			throw err;
 		}
-		webant(rawConfig,null,function(err){
+		webant(rawConfig,function(err){
 			assert.strictEqual(err,null,"there should be no errors building this config");
 			
 			var listing = fs.readdirSync(path.resolve(__dirname,"complete","build"));

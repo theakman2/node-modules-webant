@@ -1,11 +1,44 @@
 #!/usr/bin/env node
 
+console.log("Compilation beginning");
+
+var path = require("path");
+
 var webant = require("../lib/webant");
 
-if (process.argv.length > 2) {
-    var config = require(process.argv[2]);
+if (process.argv.length) {
+    var config = {};
+    var extensions = {
+        ".js":[],
+        ".hbs":[],
+        ".handlebars":[],
+        ".css":[],
+        ".html":[],
+        ".htm":[]
+    };
+    
+    for (var i = 0; i < process.argv.length; i++) {
+        var ext = path.extname(process.argv[i]);
+        if (extensions.hasOwnProperty(ext)) {
+            extensions[ext].push(process.argv[i]);
+        }
+    }
+    
+    config.jsEntryPath = extensions[".js"][0];
+    config.jsDestPath = extensions[".js"][1];
+    config.htmlEntryPath = extensions[".hbs"][0] || extensions[".handlebars"][0];
+    config.htmlDestPath = extensions[".html"][0] || extensions[".htm"][0];
+    config.cssDestPath = extensions[".css"][0];
+    
 } else {
     var config = require(process.cwd()+"/webant-config.json");
 }
 
-webant(config,process.stdout);
+webant(config,function(err){
+    if (err) {
+        console.log("Compilation unsuccessful");
+        console.log(err);
+        return;
+    }
+    console.log("Compilation successful");
+});

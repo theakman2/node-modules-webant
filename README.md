@@ -1,5 +1,4 @@
 # node-modules-webant
-[![Build Status](https://travis-ci.org/theakman2/node-modules-webant.png?branch=master)](https://travis-ci.org/theakman2/node-modules-webant)
 
 _Bringing CommonJS-style requires to the browser and more._
 
@@ -12,22 +11,13 @@ Unlike node-js though, webant allows you to import CSS files, JSON files, handle
 * Install the package globally.
 
     $ npm install webant -g
-    
-* Create a file named `webant-config.json` in your project root and define at least the following settings:
 
-````json
-{
-    "jsEntryPath":"%%base%%/src/js/main.js",
-    "jsDestPath":"%%base%%/build/main.js"
-}
-````
-
-* Navigate to the directory housing your `webant-config.json` and run `webant`:
+* Navigate to the directory housing your entry javascript file:
 
     $ cd /path/to/project/root
-    $ webant
+    $ webant src/js/main.js build/js/out.js
 
-## Tests
+## Tests [![Build Status](https://travis-ci.org/theakman2/node-modules-webant.png?branch=master)](https://travis-ci.org/theakman2/node-modules-webant)
 
     $ npm test
     
