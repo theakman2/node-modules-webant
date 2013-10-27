@@ -168,6 +168,80 @@ This allows a certain degree of flexibility. For example, you could choose to in
 </html>
 ```
 
+### Using webant with a configuration file 
+
+It's possible to define a configuration file for use by webant. Configuration files are JSON files named `webant-config.json`, e.g.:
+
+```javascript
+// path/to/src/webant-config.json
+{
+    "jsEntryPath":"src/js/main.js",
+    "jsDestPath":"build/js/out.js",
+    "htmlEntryPath":"src/index.hbs",
+    "htmlDestPath":"build/index.html",
+    "cssDestPath":"build/css/main.css"
+}
+``` 
+
+Now navigate to the directory housing the configuration file and run `webant` without any arguments:
+
+    $ cd path/to/src
+    $ webant
+
+### Using webant programmatically
+
+You may need to install webant locally for programmatic use. Navigate to your project root and run:
+
+    $ npm install webant
+
+#### Simple usage
+
+```javascript
+var webant = require("webant");
+
+/**
+ * The `settings` parameter is expected to be an object containing the same keys as the `webant-config.json` file mentioned previously. 
+ */
+webant(settings,function(err){
+    if (err) {
+        console.log("An error occurred.");
+        process.exit();
+    }
+    console.log("Webant ran successfully.");
+});
+```
+
+#### Advanced usage
+
+```javascript
+var webant = require("webant");
+/**
+ * The `settings` parameter can simply be an object containing the same keys as the `webant-config.json` file.
+ * webant.parse will use only the keys it needs and ignore the others 
+ */
+webant.parse(settings,function(err,data){
+    /*
+     * 'data' is an object containing four keys - internalJs, internalCss, externalJs, externalCss
+     * These are the same keys made available in the index.hbs template mentioned earlier.
+     */
+    if (err) {
+        console.log("An error occurred at the parsing stage.");
+        process.exit();
+    }
+    /**
+     * The `outputSettings` parameter can simply be an object containing the same keys as the `webant-config.json` file.
+     * webant.write will use only the keys it needs and ignore the others 
+     */
+    webant.write(data,outputSettings,function(err){
+        if (err) {
+            console.log("An error occurred at the writing stage.");
+            process.exit();
+        }
+        console.log("Webant ran successfully.");
+    });
+});
+```
+
 ## Tests [![Build Status](https://travis-ci.org/theakman2/node-modules-webant.png?branch=master)](https://travis-ci.org/theakman2/node-modules-webant)
 
     $ npm test
