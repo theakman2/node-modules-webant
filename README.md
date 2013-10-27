@@ -81,6 +81,93 @@ console.log(data.key1[1]); // logs 4
 
     $ webant src/js/main.js build/js/out.js
 
+### Including external CSS and javascript
+
+Sometimes you'll want your application to include javascript or CSS files hosted externally. Webant has built-in support for requiring externally hosted javascript or CSS files via the comment-style:
+
+```javascript
+/* src/js/main.js */
+//=>require //ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js
+```
+
+For external `require`s to be included within your application, first create a handlebars template like the following:
+
+```html
+<!-- src/index.hbs -->
+<!DOCTYPE html>
+<html>
+<head>
+
+    {{#each externalCss}}
+        <link rel="stylesheet" type="text/css" href="{{{this}}}" />
+    {{/each}}
+
+    {{#if internalCss}}
+        {{#if relCssPath}}
+            <link rel="stylesheet" type="text/css" href="{{{relCssPath}}}" />
+        {{/if}}
+    {{/if}}
+
+    {{#each externalJs}}
+        <script type="text/javascript" src="{{{this}}}"></script>
+    {{/each}}
+
+    {{#if internalJs}}
+        {{#if relJsPath}}
+            <script type="text/javascript" src="{{{relJsPath}}}"></script>
+        {{/if}}
+    {{/if}}
+    
+</head>
+<body>
+
+</body>
+</html>
+```
+
+Now execute webant:
+
+    $ webant src/js/main.js src/index.hbs build/js/out.js build/index.html
+
+The handlebars template at `src/index.hbs` will be compiled into the output HTML file at `build/index.html`. The two variables `externalCss` and `externalJs` are arrays containing the URLs of all `require`s to external CSS and javascript files.
+
+NB: the source handlebars template at `src/index.hbs` doesn't have to be named `index.hbs`. It can be named anything, although the file extension needs to be `hbs` or `handlebars`.
+
+### Understanding the `index.hbs` template
+
+Creating a handlebars template is necessary for including `require`s to external javascript and CSS files, but the template is used for more than that.
+
+As well as the `externalCss` and `externalJs` variables mentioned in the previous section, several other variables are available within the template:
+
+__internalJs__ *(string)* Contains all locally `require`d javascript code.
+
+__internalCss__ *(string)* Contains all locally `require`d CSS.
+
+__relCssPath__ *(string)* If an output CSS file has been declared, this is the relative path from the output HTML file to the output CSS file.
+
+__relJsPath__ *(string)* The relative path from the output HTML file to the output javascript file.
+
+This allows a certain degree of flexibility. For example, you could choose to include locally `require`d CSS interally:
+
+```html
+<!-- src/index.hbs -->
+<!DOCTYPE html>
+<html>
+<head>
+
+    {{#if internalCss}}
+        <style type="text/css">
+            {{{this}}}
+        </style>
+    {{/if}}
+
+</head>
+<body>
+
+</body>
+</html>
+```
+
 ## Tests [![Build Status](https://travis-ci.org/theakman2/node-modules-webant.png?branch=master)](https://travis-ci.org/theakman2/node-modules-webant)
 
     $ npm test
