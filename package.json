@@ -28,11 +28,9 @@
     "license": "MIT",
     "dependencies": {
         "fs-extra": "0.6.x",
-        "handlebars": "1.0.x",
         "async": "~0.2.9",
         "uglify-js": "~2.4.0",
         "webant-handler-css": "0.3.x",
-        "webant-handler-external": "0.3.x",
         "webant-handler-hbs": "0.3.x",
         "webant-handler-js": "0.3.x",
         "webant-handler-json": "0.3.x",
