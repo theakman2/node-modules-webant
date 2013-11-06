@@ -1,9 +1,0 @@
-{
-	"bar":[4,5,20,"foo"],
-	"anotherKey":{
-		"keyA":"valueA",
-		"keyB":{
-			"keyB1":5
-		}
-	}
-}

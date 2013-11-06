@@ -1,8 +1,10 @@
+var test = require("tap").test;
+
 var path = require("path");
 
 var getConfig = require("../lib/getConfig.js");
 
-exports["test getConfig"] = function(assert) {
+test("getConfig 1",function(t){
 	var rawConfig = {
 	    entry:"/path/to/src/js/main.js",
 	    destPath:"/path/to/build/main.js"
@@ -10,7 +12,7 @@ exports["test getConfig"] = function(assert) {
 	
 	var settings = getConfig(rawConfig);
 	
-	assert.deepEqual(
+	t.equivalent(
 		rawConfig,
 		{
 			entry:"/path/to/src/js/main.js",
@@ -18,9 +20,11 @@ exports["test getConfig"] = function(assert) {
 		},
 		"Original configuration object should not have been mutated."
 	);
-};
+	
+	t.end();
+});
 
-exports["test getConfig 2"] = function(assert) {
+test("getConfig 2",function(t){
 	var rawConfig = {
 	    entry:"/path/to/src/js/main.js",
 	    destPath:"/path/to/build/main.js"
@@ -28,7 +32,7 @@ exports["test getConfig 2"] = function(assert) {
 	
 	var settings = getConfig(rawConfig);
 	
-	assert.deepEqual(
+	t.equivalent(
 		settings,
 		{
 			entry:"/path/to/src/js/main.js",
@@ -50,16 +54,18 @@ exports["test getConfig 2"] = function(assert) {
 		},
 		"Defaults should have been merged in properly."
 	);
-};
+	
+	t.end();
+});
 
-exports["test getConfig 2"] = function(assert) {
+test("getConfig 3",function(t){
 	var rawConfig = {
 	    entry:"/path/to/src/js/main.js"
 	};
 	
 	var settings = getConfig(rawConfig);
 	
-	assert.deepEqual(
+	t.equivalent(
 		settings,
 		{
 			entry:"/path/to/src/js/main.js",
@@ -81,9 +87,11 @@ exports["test getConfig 2"] = function(assert) {
 		},
 		"Defaults should have been merged in properly."
 	);
-};
+	
+	t.end();
+});
 
-exports["test getConfig 3"] = function(assert) {
+test("getConfig 4",function(t){
 	var rawConfig = {
 	    entry:"/path/to/src/js/main.js",
 	    urlDestPath:"foo"
@@ -91,7 +99,7 @@ exports["test getConfig 3"] = function(assert) {
 	
 	var settings = getConfig(rawConfig);
 	
-	assert.deepEqual(
+	t.equivalent(
 		settings,
 		{
 			entry:"/path/to/src/js/main.js",
@@ -113,9 +121,11 @@ exports["test getConfig 3"] = function(assert) {
 		},
 		"Defaults should have been merged in properly."
 	);
-};
+	
+	t.end();
+});
 
-exports["test getConfig 4"] = function(assert) {
+test("getConfig 5",function(t) {
 	var rawConfig = {
 	    entry:"/path/to/src/js/main",
 	    urlDestPath:"foo"
@@ -123,7 +133,7 @@ exports["test getConfig 4"] = function(assert) {
 	
 	var settings = getConfig(rawConfig);
 	
-	assert.deepEqual(
+	t.equivalent(
 		settings,
 		{
 			entry:"/path/to/src/js/main",
@@ -145,9 +155,11 @@ exports["test getConfig 4"] = function(assert) {
 		},
 		"Defaults should have been merged in properly."
 	);
-};
+	
+	t.end();
+});
 
-exports["test getConfig 5"] = function(assert) {
+test("getConfig 6",function(t) {
 	var rawConfig = {
 	    entry:"/path/to/src/js/main",
 	    destPath:"/path/to/build/js/main",
@@ -156,7 +168,7 @@ exports["test getConfig 5"] = function(assert) {
 	
 	var settings = getConfig(rawConfig);
 	
-	assert.deepEqual(
+	t.equivalent(
 		settings,
 		{
 			entry:"/path/to/src/js/main",
@@ -178,4 +190,6 @@ exports["test getConfig 5"] = function(assert) {
 		},
 		"Defaults should have been merged in properly."
 	);
-};
+	
+	t.end();
+});
