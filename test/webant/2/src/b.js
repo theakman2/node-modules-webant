@@ -1,0 +1,1 @@
+module.exports = "I'm from b.js";

@@ -27,7 +27,7 @@ test("getConfig 1",function(t){
 test("getConfig 2",function(t){
 	var rawConfig = {
 	    entry:"/path/to/src/js/main.js",
-	    destPath:"/path/to/build/main.js"
+	    destPath:"/path/to/build/main.out.js"
 	};
 	
 	var settings = getConfig(rawConfig);
@@ -35,9 +35,9 @@ test("getConfig 2",function(t){
 	t.equivalent(
 		settings,
 		{
-			entry:"/path/to/src/js/main.js",
-			destPath:"/path/to/build/main.%ID%.js",
-			urlDestPath:"main.%ID%.js",
+			entry:path.resolve("/path/to/src/js/main.js"),
+			destPath:path.resolve("/path/to/build/main.out.js"),
+			urlDestPath:"main.out.js",
 			mode:"normal",
 			aliases:{},
 			defaultExtension:".js",
@@ -50,7 +50,8 @@ test("getConfig 2",function(t){
 				scss:{},
 				stylus:{},
 				text:{}
-		    }
+		    },
+		    includes:[]
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -68,9 +69,9 @@ test("getConfig 3",function(t){
 	t.equivalent(
 		settings,
 		{
-			entry:"/path/to/src/js/main.js",
-			destPath:"/path/to/src/js/main.%ID%.js",
-			urlDestPath:"main.%ID%.js",
+			entry:path.resolve("/path/to/src/js/main.js"),
+			destPath:path.resolve("/path/to/src/js/main.out.js"),
+			urlDestPath:"main.out.js",
 			mode:"normal",
 			aliases:{},
 			defaultExtension:".js",
@@ -83,7 +84,8 @@ test("getConfig 3",function(t){
 				scss:{},
 				stylus:{},
 				text:{}
-		    }
+		    },
+		    includes:[]
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -102,8 +104,8 @@ test("getConfig 4",function(t){
 	t.equivalent(
 		settings,
 		{
-			entry:"/path/to/src/js/main.js",
-			destPath:"/path/to/src/js/main.%ID%.js",
+			entry:path.resolve("/path/to/src/js/main.js"),
+			destPath:path.resolve("/path/to/src/js/main.out.js"),
 			urlDestPath:"foo",
 			mode:"normal",
 			aliases:{},
@@ -117,7 +119,8 @@ test("getConfig 4",function(t){
 				scss:{},
 				stylus:{},
 				text:{}
-		    }
+		    },
+		    includes:[]
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -136,8 +139,8 @@ test("getConfig 5",function(t) {
 	t.equivalent(
 		settings,
 		{
-			entry:"/path/to/src/js/main",
-			destPath:"/path/to/src/js/main.%ID%",
+			entry:path.resolve("/path/to/src/js/main"),
+			destPath:path.resolve("/path/to/src/js/main.out"),
 			urlDestPath:"foo",
 			mode:"normal",
 			aliases:{},
@@ -151,7 +154,8 @@ test("getConfig 5",function(t) {
 				scss:{},
 				stylus:{},
 				text:{}
-		    }
+		    },
+		    includes:[]
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -171,8 +175,8 @@ test("getConfig 6",function(t) {
 	t.equivalent(
 		settings,
 		{
-			entry:"/path/to/src/js/main",
-			destPath:"/path/to/build/js/main.%ID%",
+			entry:path.resolve("/path/to/src/js/main"),
+			destPath:path.resolve("/path/to/build/js/main"),
 			urlDestPath:"foo",
 			mode:"normal",
 			aliases:{},
@@ -186,7 +190,8 @@ test("getConfig 6",function(t) {
 				scss:{},
 				stylus:{},
 				text:{}
-		    }
+		    },
+		    includes:[]
 		},
 		"Defaults should have been merged in properly."
 	);

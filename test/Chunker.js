@@ -1,6 +1,6 @@
 var test = require("tap").test;
 
-var Chunker = require("../../lib/util/Chunker.js");
+var Chunker = require("../lib/util/Chunker.js");
 
 test("chunker 1",function(t){
 	var chunker = new Chunker();

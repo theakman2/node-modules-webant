@@ -40,12 +40,13 @@
         "webant-handler-text": "0.4.x"
     },
     "devDependencies": {
-        "tap": "0.4.x"
+        "tap": "0.4.x",
+        "phantomjs":"1.9.x"
     },
     "repository":"git://github.com/theakman2/node-modules-webant.git",
     "bin": "./bin/webant",
     "main": "./lib/webant",
     "scripts": {
-        "test": "tap ./test/**/*"
+        "test": "tap ./test/*"
     }
 }
