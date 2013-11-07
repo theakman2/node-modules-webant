@@ -64,7 +64,7 @@ function doTest(testId,numChunksExpected,cb) {
 							{
 								cwd:path.join(baseDir,testId),
 								maxBuffer:1024*1024,
-								timeout:15*1000
+								timeout:20*1000
 							},
 							function(err,stdout,stderr) {
 								console.log(err,stdout,stderr);
@@ -81,7 +81,7 @@ function doTest(testId,numChunksExpected,cb) {
 						setTimeout(function(){
 							t.bailout("Phantomjs taking too long to execute for webant test "+testId);
 							t.end();
-						},16*1000);
+						},21*1000);
 					});
 				});
 			});
