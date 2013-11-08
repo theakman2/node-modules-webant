@@ -1,6 +1,6 @@
 {
     "name": "webant",
-    "version": "0.8.0-beta3",
+    "version": "0.8.0-beta5",
     "description": "Bringing CommonJS-style requires to the browser and more.",
     "keywords":[
        "ant",
@@ -27,6 +27,7 @@
     "author": "A Kazim",
     "license": "MIT",
     "dependencies": {
+        "optimist":"0.6.x",
         "fs-extra": "0.6.x",
         "async": "~0.2.9",
         "uglify-js": "~2.4.0",

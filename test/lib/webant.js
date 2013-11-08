@@ -32,8 +32,8 @@ function doTest(testId,numChunksExpected,additionalOpts,cb) {
 				}
 				webant(extend(true,{
 					entry:path.join(srcDir,"main.js"),
-					destPath:path.join(destDir,"main.js"),
-					urlDestPath:"js/main.js"
+					dest:path.join(destDir,"main.js"),
+					urlDest:"js/main.js"
 				},additionalOpts),function(err){
 					t.ok(!err,"There should be no errors compiling webant test "+testId);
 					
@@ -69,8 +69,7 @@ function doTest(testId,numChunksExpected,additionalOpts,cb) {
 							[phantomScript],
 							{
 								cwd:path.join(baseDir,testId),
-								maxBuffer:1024*1024,
-								timeout:20*1000
+								maxBuffer:1024*1024
 							},
 							function(err,stdout,stderr) {
 								var obj;
@@ -83,10 +82,6 @@ function doTest(testId,numChunksExpected,additionalOpts,cb) {
 								}
 							}
 						);
-						setTimeout(function(){
-							t.bailout("Phantomjs taking too long to execute for webant test "+testId);
-							t.end();
-						},21*1000);
 					});
 				});
 			});

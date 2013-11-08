@@ -7,7 +7,7 @@ var getConfig = require("../lib/getConfig.js");
 test("getConfig 1",function(t){
 	var rawConfig = {
 	    entry:"/path/to/src/js/main.js",
-	    destPath:"/path/to/build/main.js"
+	    dest:"/path/to/build/main.js"
 	};
 	
 	var settings = getConfig(rawConfig);
@@ -16,7 +16,7 @@ test("getConfig 1",function(t){
 		rawConfig,
 		{
 			entry:"/path/to/src/js/main.js",
-			destPath:"/path/to/build/main.js"
+			dest:"/path/to/build/main.js"
 		},
 		"Original configuration object should not have been mutated."
 	);
@@ -27,7 +27,7 @@ test("getConfig 1",function(t){
 test("getConfig 2",function(t){
 	var rawConfig = {
 	    entry:"/path/to/src/js/main.js",
-	    destPath:"/path/to/build/main.out.js"
+	    dest:"/path/to/build/main.out.js"
 	};
 	
 	var settings = getConfig(rawConfig);
@@ -36,8 +36,8 @@ test("getConfig 2",function(t){
 		settings,
 		{
 			entry:path.resolve("/path/to/src/js/main.js"),
-			destPath:path.resolve("/path/to/build/main.out.js"),
-			urlDestPath:"main.out.js",
+			dest:path.resolve("/path/to/build/main.out.js"),
+			urlDest:"main.out.js",
 			mode:"normal",
 		    handlers:{
 				css:{},
@@ -48,8 +48,7 @@ test("getConfig 2",function(t){
 				scss:{},
 				stylus:{},
 				text:{}
-		    },
-		    includes:[]
+		    }
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -68,8 +67,8 @@ test("getConfig 3",function(t){
 		settings,
 		{
 			entry:path.resolve("/path/to/src/js/main.js"),
-			destPath:path.resolve("/path/to/src/js/main.out.js"),
-			urlDestPath:"main.out.js",
+			dest:path.resolve("/path/to/src/js/main.out.js"),
+			urlDest:"main.out.js",
 			mode:"normal",
 		    handlers:{
 				css:{},
@@ -80,8 +79,7 @@ test("getConfig 3",function(t){
 				scss:{},
 				stylus:{},
 				text:{}
-		    },
-		    includes:[]
+		    }
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -92,7 +90,7 @@ test("getConfig 3",function(t){
 test("getConfig 4",function(t){
 	var rawConfig = {
 	    entry:"/path/to/src/js/main.js",
-	    urlDestPath:"foo"
+	    urlDest:"foo"
 	};
 	
 	var settings = getConfig(rawConfig);
@@ -101,8 +99,8 @@ test("getConfig 4",function(t){
 		settings,
 		{
 			entry:path.resolve("/path/to/src/js/main.js"),
-			destPath:path.resolve("/path/to/src/js/main.out.js"),
-			urlDestPath:"foo",
+			dest:path.resolve("/path/to/src/js/main.out.js"),
+			urlDest:"foo",
 			mode:"normal",
 		    handlers:{
 				css:{},
@@ -113,8 +111,7 @@ test("getConfig 4",function(t){
 				scss:{},
 				stylus:{},
 				text:{}
-		    },
-		    includes:[]
+		    }
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -125,7 +122,7 @@ test("getConfig 4",function(t){
 test("getConfig 5",function(t) {
 	var rawConfig = {
 	    entry:"/path/to/src/js/main",
-	    urlDestPath:"foo"
+	    urlDest:"foo"
 	};
 	
 	var settings = getConfig(rawConfig);
@@ -134,8 +131,8 @@ test("getConfig 5",function(t) {
 		settings,
 		{
 			entry:path.resolve("/path/to/src/js/main"),
-			destPath:path.resolve("/path/to/src/js/main.out"),
-			urlDestPath:"foo",
+			dest:path.resolve("/path/to/src/js/main.out"),
+			urlDest:"foo",
 			mode:"normal",
 		    handlers:{
 				css:{},
@@ -146,8 +143,7 @@ test("getConfig 5",function(t) {
 				scss:{},
 				stylus:{},
 				text:{}
-		    },
-		    includes:[]
+		    }
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -158,8 +154,8 @@ test("getConfig 5",function(t) {
 test("getConfig 6",function(t) {
 	var rawConfig = {
 	    entry:"/path/to/src/js/main",
-	    destPath:"/path/to/build/js/main",
-	    urlDestPath:"foo"
+	    dest:"/path/to/build/js/main",
+	    urlDest:"foo"
 	};
 	
 	var settings = getConfig(rawConfig);
@@ -168,8 +164,8 @@ test("getConfig 6",function(t) {
 		settings,
 		{
 			entry:path.resolve("/path/to/src/js/main"),
-			destPath:path.resolve("/path/to/build/js/main"),
-			urlDestPath:"foo",
+			dest:path.resolve("/path/to/build/js/main"),
+			urlDest:"foo",
 			mode:"normal",
 		    handlers:{
 				css:{},
@@ -180,8 +176,7 @@ test("getConfig 6",function(t) {
 				scss:{},
 				stylus:{},
 				text:{}
-		    },
-		    includes:[]
+		    }
 		},
 		"Defaults should have been merged in properly."
 	);

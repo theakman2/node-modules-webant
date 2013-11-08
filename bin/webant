@@ -1,24 +1,77 @@
 #!/usr/bin/env node
 
-console.log("Compilation beginning");
+var optimist = require("optimist")
+    .usage("$0 --entry src/js/main.js --dest build/js/main.js")
+    .describe("entry","Path to entry script relative to current directory.")
+    .describe("dest","Path to where compiled output will be written.")
+    .describe("urldest","The URL of 'dest'.")
+    .describe("compress","Compress compiled scripts.")
+    .describe("debug","Output line numbers of original files in compiled scripts.")
+    .describe("handler","Specify an additional handler to use. Can be used multiple times.")
+    .describe("useconfig","Use the webant-config.json configuration in the current directory.")
+    .describe("version","Print the version.")
+    .describe("help","Display usage.")
+    .alias("entry","e")
+    .alias("dest","d")
+    .alias("urldest","u")
+    .alias("handler","H")
+    .alias("help","h")
+    .alias("useconfig","c")
+    .alias("compress","C")
+    .alias("debug","D")
+    .alias("version","v")
+    .string("entry")
+    .string("dest")
+    .string("urlDest")
+    .string("handler")
+    .boolean("compress")
+    .boolean("debug")
+    .boolean("useconfig")
+    .boolean("help")
+    .boolean("version")
+    .wrap(80);
+    
+var args = optimist.argv;
+
+if (args.help) {
+    optimist.showHelp();
+    process.exit();
+}
+
+if (args.version) {
+    console.log(require(__dirname+"/../package.json").version);
+    process.exit();
+}
 
 var webant = require("../lib/webant");
 
-if (process.argv.length > 2) {
-    var config = {
-        entry:process.argv[2],
-        destPath:process.argv[3],
-        urlDestPath:process.argv[4]
-    };
-} else {
+if (args.useconfig) {
     var config = require(process.cwd()+"/webant-config.json");
+} else {
+    var config = {
+        entry:args.entry,
+        dest:args.dest,
+        urlDest:args.urldest,
+        mode:args.compress ? "compress" : args.debug ? "debug" : "normal"
+    };
+    var handlers = args.handler;
+    if (handlers) {
+        config.handlers = {};
+        if (!Array.isArray(handlers)) {
+            handlers = [handlers];
+        }
+        for (var i = 0; i < handlers.length; i++) {
+            config.handlers[handlers[i]] = {};
+        }
+    }
 }
 
-webant(config,function(err){
+console.log("Compilation beginning");
+webant(config,function(err,data){
     if (err) {
         console.log("Compilation unsuccessful");
-        console.log(err);
+        throw err;
         return;
     }
-    console.log("Compilation successful");
+    console.log("Compilation successful ["+data.numModules+" modules in "+data.numFiles+" files]");
 });

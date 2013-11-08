@@ -17,6 +17,7 @@ require("./nested1/f.js",function(f){
 				require("jquery-1.10.2.js",function($){
 					$(document).ready(function(){
 						window.__global.height = $("body").first().height();
+						window.__global.width = $("body").first().width();
 					});
 				});
 			});

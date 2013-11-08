@@ -1,3 +1,5 @@
+require("styles.css");
+
 module.exports.done = function(cb){
 	require("../../g.hbs",function(g){
 		var e = require("../e.js");

@@ -5,12 +5,13 @@ var async = require("async");
 
 var webantTester = require("./lib/webant.js");
 
-webantTester(7,4,{mode:"compress"},function(obj,srcDir,destDir,t){
+webantTester(7,5,{mode:"compress"},function(obj,srcDir,destDir,t){
 	t.equivalent(obj,{
 		f:"Message from module foo!HJS",
 		a:50,
 		b:"Message from module foo!HJSMessage from module bar!e.jsc.js",
 		height:134,
+		width:422,
 		data:12
 	});
 	

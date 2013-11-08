@@ -12,7 +12,7 @@ require([ "1", "0" ], function(f) {
         require([ "0", "2" ]).foo(function(d, f) {
             d.done(function(msg) {
                 window.__global.b = f.msg + msg;
-                require([ "3", "0" ], function($) {
+                require([ "4", "0" ], function($) {
                     $(document).ready(function() {
                         window.__global.height = $("body").first().height();
                     });
@@ -48,30 +48,7 @@ module.exports.foo = function(cb) {
 
 require([ "0", "3" ]);
 },"3":function(require,module,exports) {
-require([ "0", "4" ])("body {\n    height:571px;\n}\n");
-},"4":function(require,module,exports) {
-/**
- * Taken verbatim from medikoo's node webmake module (https://github.com/medikoo/modules-webmake)
- **/
-var style, add;
-
-if (document.createStyleSheet) {
-    // IE
-    if (document.styleSheets.length > 29) {
-        style = document.styleSheets[document.styleSheets.length - 1];
-    } else {
-        style = document.createStyleSheet();
-    }
-    add = function(css) {
-        style.cssText += css;
-    };
-} else {
-    style = document.getElementsByTagName("head")[0].appendChild(document.createElement("style"));
-    style.setAttribute("type", "text/css");
-    add = function(css) {
-        style.appendChild(document.createTextNode(css));
-    };
-}
-
-module.exports = add;
+require([ "3", "0" ], function(add) {
+    add("body {\n    height:571px;\n}\n");
+});
 }};

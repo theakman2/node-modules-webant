@@ -24,7 +24,7 @@ require([ "1", "0" ], function(f) {
                 //C:\xampp\htdocs\node-modules-webant\test\webant\6\src\main.js: 14
                 window.__global.b = f.msg + msg;
                 //C:\xampp\htdocs\node-modules-webant\test\webant\6\src\main.js: 15
-                require([ "3", "0" ], function($) {
+                require([ "4", "0" ], function($) {
                     //C:\xampp\htdocs\node-modules-webant\test\webant\6\src\main.js: 16
                     $(document).ready(function() {
                         //C:\xampp\htdocs\node-modules-webant\test\webant\6\src\main.js: 17
@@ -78,43 +78,7 @@ module.exports.foo = function(cb) {
 require([ "0", "3" ]);
 },"3":function(require,module,exports) {
 //C:\xampp\htdocs\node-modules-webant\test\webant\6\src\nested1\styles.less: 1
-require([ "0", "4" ])("html body {\n  height: 571px;\n}");
-},"4":function(require,module,exports) {
-/**
- * Taken verbatim from medikoo's node webmake module (https://github.com/medikoo/modules-webmake)
- **/
-//@@css/addStylesheet: 4
-var style, add;
-
-//@@css/addStylesheet: 5
-if (document.createStyleSheet) {
-    // IE
-    //@@css/addStylesheet: 7
-    if (document.styleSheets.length > 29) {
-        //@@css/addStylesheet: 8
-        style = document.styleSheets[document.styleSheets.length - 1];
-    } else //@@css/addStylesheet: 9
-    {
-        //@@css/addStylesheet: 10
-        style = document.createStyleSheet();
-    }
-    //@@css/addStylesheet: 12
-    add = function(css) {
-        style.cssText += css;
-    };
-} else //@@css/addStylesheet: 13
-{
-    //@@css/addStylesheet: 14
-    style = document.getElementsByTagName("head")[0].appendChild(//@@css/addStylesheet: 15
-    document.createElement("style"));
-    //@@css/addStylesheet: 16
-    style.setAttribute("type", "text/css");
-    //@@css/addStylesheet: 17
-    add = function(css) {
-        style.appendChild(document.createTextNode(css));
-    };
-}
-
-//@@css/addStylesheet: 19
-module.exports = add;
+require([ "3", "0" ], function(add) {
+    add("html body {\n  height: 571px;\n}");
+});
 }};
