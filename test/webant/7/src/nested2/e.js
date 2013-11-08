@@ -1,0 +1,1 @@
+module.exports = require("./nested2a/foo.html");

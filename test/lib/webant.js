@@ -2,6 +2,7 @@ var fs = require("fs-extra");
 var path = require("path");
 var childProcess = require("child_process");
 
+var extend = require("extend");
 var phantomjs = require("phantomjs").path;
 var test = require("tap").test;
 
@@ -10,7 +11,7 @@ var webant = require("../../lib/webant.js");
 var baseDir = path.join(__dirname,"..","webant");
 var phantomScript = path.join(baseDir,"phantomwebant.js");
 
-function doTest(testId,numChunksExpected,cb) {
+function doTest(testId,numChunksExpected,additionalOpts,cb) {
 	testId = testId.toString();
 	
 	var srcDir = path.join(baseDir,testId,"src");
@@ -29,16 +30,21 @@ function doTest(testId,numChunksExpected,cb) {
 					t.end();
 					return;
 				}
-				webant({
+				webant(extend(true,{
 					entry:path.join(srcDir,"main.js"),
 					destPath:path.join(destDir,"main.js"),
 					urlDestPath:"js/main.js"
-				},function(err){
+				},additionalOpts),function(err){
 					t.ok(!err,"There should be no errors compiling webant test "+testId);
 					
 					fs.readdir(destDir,function(err,files){
 						if (err) {
 							t.bailout("Could not read newly created build files for webant test "+testId);
+							t.end();
+						}
+						
+						if (!files) {
+							t.bailout("No files created for webant test "+testId);
 							t.end();
 						}
 						
@@ -67,11 +73,10 @@ function doTest(testId,numChunksExpected,cb) {
 								timeout:20*1000
 							},
 							function(err,stdout,stderr) {
-								console.log(err,stdout,stderr);
 								var obj;
 								try {
 									obj = JSON.parse(stdout.trim());
-									cb(obj,t);
+									cb(obj,srcDir,destDir,t);
 								} catch(e) {
 									t.bailout("Could not JSON.parse() stdout for webant test "+testId);
 									t.end();

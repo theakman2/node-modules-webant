@@ -48,7 +48,7 @@ module.exports.foo = function(cb) {
 
 require([ "0", "3" ]);
 },"3":function(require,module,exports) {
-require([ "0", "4" ])("body {\n    height:571px;\n}");
+require([ "0", "4" ])("body {\n    height:571px;\n}\n");
 },"4":function(require,module,exports) {
 /**
  * Taken verbatim from medikoo's node webmake module (https://github.com/medikoo/modules-webmake)

@@ -39,8 +39,6 @@ test("getConfig 2",function(t){
 			destPath:path.resolve("/path/to/build/main.out.js"),
 			urlDestPath:"main.out.js",
 			mode:"normal",
-			aliases:{},
-			defaultExtension:".js",
 		    handlers:{
 				css:{},
 				hbs:{},
@@ -73,8 +71,6 @@ test("getConfig 3",function(t){
 			destPath:path.resolve("/path/to/src/js/main.out.js"),
 			urlDestPath:"main.out.js",
 			mode:"normal",
-			aliases:{},
-			defaultExtension:".js",
 		    handlers:{
 				css:{},
 				hbs:{},
@@ -108,8 +104,6 @@ test("getConfig 4",function(t){
 			destPath:path.resolve("/path/to/src/js/main.out.js"),
 			urlDestPath:"foo",
 			mode:"normal",
-			aliases:{},
-			defaultExtension:".js",
 		    handlers:{
 				css:{},
 				hbs:{},
@@ -143,8 +137,6 @@ test("getConfig 5",function(t) {
 			destPath:path.resolve("/path/to/src/js/main.out"),
 			urlDestPath:"foo",
 			mode:"normal",
-			aliases:{},
-			defaultExtension:".js",
 		    handlers:{
 				css:{},
 				hbs:{},
@@ -179,8 +171,6 @@ test("getConfig 6",function(t) {
 			destPath:path.resolve("/path/to/build/js/main"),
 			urlDestPath:"foo",
 			mode:"normal",
-			aliases:{},
-			defaultExtension:".js",
 		    handlers:{
 				css:{},
 				hbs:{},
