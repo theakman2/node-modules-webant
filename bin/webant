@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 var optimist = require("optimist")
-    .usage("$0 --entry src/js/main.js --dest build/js/main.js")
     .describe("entry","Path to entry script relative to current directory.")
     .describe("dest","Path to where compiled output will be written.")
     .describe("urldest","The URL of 'dest'.")
