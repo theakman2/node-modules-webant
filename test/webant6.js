@@ -16,7 +16,7 @@ webantTester(6,5,{mode:"debug"},function(obj,srcDir,destDir,t){
 		var debugMsg = "//"+path.join(srcDir,"main.js")+": 1";
 		
 		t.ok(
-			content.toString().indexOf(debugMsg+"\nwindow.__global = {};") > -1,
+			content.toString().indexOf(debugMsg+"\n__global = {};") > -1,
 			"File should contain debugging comments."
 		);
 		
