@@ -1,4 +1,4 @@
-var webantTester = require("./lib/webant.js");
+var webantTester = require("../lib/webant.js");
 
 webantTester(4,3,{},function(obj,srcDir,destDir,t){
 	t.equivalent(obj,{

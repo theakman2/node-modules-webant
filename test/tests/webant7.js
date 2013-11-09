@@ -3,7 +3,7 @@ var path = require("path");
 
 var async = require("async");
 
-var webantTester = require("./lib/webant.js");
+var webantTester = require("../lib/webant.js");
 
 webantTester(7,4,{mode:"compress"},function(obj,srcDir,destDir,t){
 	t.equivalent(obj,{

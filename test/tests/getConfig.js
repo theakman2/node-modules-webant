@@ -2,7 +2,7 @@ var test = require("tap").test;
 
 var path = require("path");
 
-var getConfig = require("../lib/getConfig.js");
+var getConfig = require("../../lib/getConfig.js");
 
 test("getConfig 1",function(t){
 	var rawConfig = {
