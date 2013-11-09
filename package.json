@@ -50,6 +50,6 @@
     "bin": "./bin/webant",
     "main": "./lib/webant",
     "scripts": {
-        "test": "tap ./test/*"
+        "test": "tap --timeout 300 ./test/*"
     }
 }
