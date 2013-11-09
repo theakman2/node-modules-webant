@@ -64,7 +64,7 @@ function doTest(testId,numChunksExpected,additionalOpts,cb) {
 							"File count should match expected chunk count for webant test "+testId
 						);
 						
-						childProcess.execFile(
+						var pjs = childProcess.execFile(
 							phantomjs,
 							[phantomScript],
 							{
@@ -72,6 +72,7 @@ function doTest(testId,numChunksExpected,additionalOpts,cb) {
 								maxBuffer:1024*1024
 							},
 							function(err,stdout,stderr) {
+								pjs.kill();
 								var obj;
 								try {
 									obj = JSON.parse(stdout.trim());
