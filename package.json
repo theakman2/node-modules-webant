@@ -1,6 +1,6 @@
 {
     "name": "webant",
-    "version": "0.8.2",
+    "version": "0.8.3",
     "description": "Bringing CommonJS-style requires to the browser and more.",
     "keywords":[
        "ant",
@@ -33,13 +33,13 @@
         "uglify-js": "~2.4.0",
         "extend":"1.2.x",
         "js-string-escape":"1.0.x",
-        "webant-handler-css": "0.4.x",
-        "webant-handler-hbs": "0.4.x",
+        "webant-handler-css": ">=0.4.1",
+        "webant-handler-hbs": ">=0.4.1",
         "webant-handler-js": "0.4.x",
         "webant-handler-json": "0.4.x",
-        "webant-handler-less": "0.4.x",
-        "webant-handler-scss": "0.4.x",
-        "webant-handler-stylus": "0.4.x",
+        "webant-handler-less": ">=0.4.1",
+        "webant-handler-scss": ">=0.4.1",
+        "webant-handler-stylus": ">=0.4.1",
         "webant-handler-text": "0.4.x"
     },
     "devDependencies": {
