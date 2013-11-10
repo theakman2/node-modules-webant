@@ -34,12 +34,12 @@ function doTest(testId,numChunksExpected,additionalOpts,cb) {
 					entry:path.join(srcDir,"main.js"),
 					dest:path.join(destDir,"main.js"),
 					urlDest:"js/main.js"
-				},additionalOpts),function(err){
-					t.ok(!err,"There should be no errors compiling webant test "+testId);
+				},additionalOpts),function(err2){
+					t.ok(!err2,"There should be no errors compiling webant test "+testId);
 					
-					fs.readdir(destDir,function(err,files){
-						if (err) {
-							t.bailout("Could not read newly created build files for webant test "+testId);
+					fs.readdir(destDir,function(err3,files){
+						if (err3) {
+							t.bailout("Could not read newly created build files for webant test "+testId+": "+err3);
 							t.end();
 						}
 						
@@ -71,7 +71,7 @@ function doTest(testId,numChunksExpected,additionalOpts,cb) {
 								cwd:path.join(baseDir,testId),
 								maxBuffer:1024*1024
 							},
-							function(err,stdout,stderr) {
+							function(err4,stdout,stderr) {
 								pjs.kill();
 								var obj;
 								try {

@@ -3,12 +3,13 @@ var path = require("path");
 
 var webantTester = require("../lib/webant.js");
 
-webantTester(6,5,{mode:"debug"},function(obj,srcDir,destDir,t){
+webantTester(6,4,{mode:"debug"},function(obj,srcDir,destDir,t){
 	t.equivalent(obj,{
 		f:"Message from module foo!HJS",
 		a:50,
 		b:"Message from module foo!HJSMessage from module bar!e.jsc.js",
-		height:571
+		height:571,
+		width:110
 	});
 	fs.readFile(destDir+"/main0.js",function(err,content){
 		t.ok(!err,"There should be no errors reading the first chunk.");

@@ -5,5 +5,3 @@ module.exports.foo = function(cb){
 		cb(d,f);
 	});	
 };
-
-require("styles.less");
