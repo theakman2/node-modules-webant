@@ -38,7 +38,7 @@ test("getConfig 2",function(t){
 			entry:path.resolve("/path/to/src/js/main.js"),
 			dest:path.resolve("/path/to/build/main.out.js"),
 			urlDest:"main.out.js",
-			mode:"normal",
+			postProcess:"none",
 		    handlers:{
 				css:{},
 				hbs:{},
@@ -58,7 +58,8 @@ test("getConfig 2",function(t){
 
 test("getConfig 3",function(t){
 	var rawConfig = {
-	    entry:"/path/to/src/js/main.js"
+	    entry:"/path/to/src/js/main.js",
+	    handlers:"coffee"
 	};
 	
 	var settings = getConfig(rawConfig);
@@ -69,7 +70,7 @@ test("getConfig 3",function(t){
 			entry:path.resolve("/path/to/src/js/main.js"),
 			dest:path.resolve("/path/to/src/js/main.out.js"),
 			urlDest:"main.out.js",
-			mode:"normal",
+			postProcess:"none",
 		    handlers:{
 				css:{},
 				hbs:{},
@@ -78,7 +79,8 @@ test("getConfig 3",function(t){
 				less:{},
 				scss:{},
 				stylus:{},
-				text:{}
+				text:{},
+				coffee:{}
 		    }
 		},
 		"Defaults should have been merged in properly."
@@ -90,7 +92,8 @@ test("getConfig 3",function(t){
 test("getConfig 4",function(t){
 	var rawConfig = {
 	    entry:"/path/to/src/js/main.js",
-	    urlDest:"foo"
+	    urlDest:"foo",
+	    handlers:["foo","bar","baz"]
 	};
 	
 	var settings = getConfig(rawConfig);
@@ -101,7 +104,7 @@ test("getConfig 4",function(t){
 			entry:path.resolve("/path/to/src/js/main.js"),
 			dest:path.resolve("/path/to/src/js/main.out.js"),
 			urlDest:"foo",
-			mode:"normal",
+			postProcess:"none",
 		    handlers:{
 				css:{},
 				hbs:{},
@@ -110,7 +113,10 @@ test("getConfig 4",function(t){
 				less:{},
 				scss:{},
 				stylus:{},
-				text:{}
+				text:{},
+				foo:{},
+				bar:{},
+				baz:{}
 		    }
 		},
 		"Defaults should have been merged in properly."
@@ -122,7 +128,15 @@ test("getConfig 4",function(t){
 test("getConfig 5",function(t) {
 	var rawConfig = {
 	    entry:"/path/to/src/js/main",
-	    urlDest:"foo"
+	    urlDest:"foo",
+	    handlers:{
+	    	foo:{
+	    		arg1:5,
+	    		arg2:"test"
+	    	},
+	    	bar:{},
+	    	baz:{}
+	    }
 	};
 	
 	var settings = getConfig(rawConfig);
@@ -133,7 +147,7 @@ test("getConfig 5",function(t) {
 			entry:path.resolve("/path/to/src/js/main"),
 			dest:path.resolve("/path/to/src/js/main.out"),
 			urlDest:"foo",
-			mode:"normal",
+			postProcess:"none",
 		    handlers:{
 				css:{},
 				hbs:{},
@@ -142,7 +156,13 @@ test("getConfig 5",function(t) {
 				less:{},
 				scss:{},
 				stylus:{},
-				text:{}
+				text:{},
+				foo:{
+					arg1:5,
+					arg2:"test"
+				},
+				bar:{},
+				baz:{}
 		    }
 		},
 		"Defaults should have been merged in properly."
@@ -166,7 +186,7 @@ test("getConfig 6",function(t) {
 			entry:path.resolve("/path/to/src/js/main"),
 			dest:path.resolve("/path/to/build/js/main"),
 			urlDest:"foo",
-			mode:"normal",
+			postProcess:"none",
 		    handlers:{
 				css:{},
 				hbs:{},
@@ -180,6 +200,74 @@ test("getConfig 6",function(t) {
 		},
 		"Defaults should have been merged in properly."
 	);
+	
+	t.end();
+});
+
+test("getConfig 7",function(t) {
+	t.throws(function(){
+		getConfig({});
+	});
+
+	t.throws(function(){
+		getConfig({
+			entry:50
+		});
+	});
+	
+	t.throws(function(){
+		getConfig({
+			entry:"path/to/src.js",
+			dest:true
+		});
+	});
+	
+	t.throws(function(){
+		getConfig({
+			entry:"path/to/src.js",
+			dest:"path/to/dest.js",
+			urlDest:[]
+		});
+	});
+	
+	t.throws(function(){
+		getConfig({
+			entry:"path/to/src.js",
+			dest:"path/to/dest.js",
+			urlDest:"http://mysite.com/path/to/dest.js",
+			postProcess:"RANDOM VALUE"
+		});
+	});
+	
+	t.throws(function(){
+		getConfig({
+			entry:"path/to/src.js",
+			dest:"path/to/dest.js",
+			urlDest:"http://mysite.com/path/to/dest.js",
+			postProcess:"normal",
+			handlers:true
+		});
+	});
+	
+	t.throws(function(){
+		getConfig({
+			entry:"path/to/src.js",
+			dest:"path/to/dest.js",
+			urlDest:"http://mysite.com/path/to/dest.js",
+			postProcess:"normal",
+			handlers:34
+		});
+	});
+	
+	t.throws(function(){
+		getConfig({
+			entry:"path/to/src.js",
+			dest:"path/to/dest.js",
+			urlDest:"http://mysite.com/path/to/dest.js",
+			postProcess:"normal",
+			handlers:[6e3]
+		});
+	});
 	
 	t.end();
 });

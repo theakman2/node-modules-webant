@@ -1,33 +1,38 @@
 #!/usr/bin/env node
 
+var path = require("path");
+
 var optimist = require("optimist")
-    .describe("entry","Path to entry script relative to current directory.")
+    .usage(
+        "WEBANT, the intelligent javascript web bundler\n\n" +
+        "Usage:\n" +
+        "  $0 --useConfig [options]\n" + 
+        "  $0 --useConfig [config filename] [options]\n" +
+        "  $0 --entry [path to entry script] [options]"
+    )
+    .describe("entry","Path to entry script relative to current directory. [Required, unless --useConfig flag is set].")
     .describe("dest","Path to where compiled output will be written.")
-    .describe("urldest","The URL of 'dest'.")
-    .describe("compress","Compress compiled scripts.")
-    .describe("debug","Output line numbers of original files in compiled scripts.")
-    .describe("handler","Specify an additional handler to use. Can be used multiple times.")
-    .describe("useconfig","Use the webant-config.json configuration in the current directory.")
-    .describe("version","Print the version.")
-    .describe("help","Display usage.")
+    .describe("urlDest","URL at which the path specified for '--dest' can be reached.")
+    .describe("postProcess","Post-processing to apply to compiled javascript. Can be either 'compress' (compresses output), 'debug' (adds file and line numbers to output) or 'none' (no post-processing).")
+    .describe("handlers","Additional handlers to use. Can be set multiple times. Example: -H coffee -H scss -H json")
+    .describe("useConfig","Filename of a JSON configuration file in the current directory which sets default options. If this option is set but no filename is provided, the filename is assumed to be 'webant-config.json'. [Required, unless --entry option is provided]. [Additional options override those found in the configuration file].")
+    .describe("version","Show version.")
+    .describe("help","Show help.")
     .alias("entry","e")
     .alias("dest","d")
-    .alias("urldest","u")
-    .alias("handler","H")
-    .alias("help","h")
-    .alias("useconfig","c")
-    .alias("compress","C")
-    .alias("debug","D")
+    .alias("urlDest","u")
+    .alias("postProcess","p")
+    .alias("handlers","H")
+    .alias("useConfig","c")
     .alias("version","v")
+    .alias("help","h")
     .string("entry")
     .string("dest")
     .string("urlDest")
-    .string("handler")
-    .boolean("compress")
-    .boolean("debug")
-    .boolean("useconfig")
-    .boolean("help")
+    .string("postProcess")
+    .string("useConfig")
     .boolean("version")
+    .boolean("help")
     .wrap(80);
     
 var args = optimist.argv;
@@ -42,35 +47,48 @@ if (args.version) {
     process.exit();
 }
 
-var webant = require("../lib/webant");
+if (!args.entry && !args.useConfig) {
+    optimist.showHelp();
+    process.exit(1);
+}
 
-if (args.useconfig) {
-    var config = require(process.cwd()+"/webant-config.json");
-} else {
-    var config = {
-        entry:args.entry,
-        dest:args.dest,
-        urlDest:args.urldest,
-        mode:args.compress ? "compress" : args.debug ? "debug" : "normal"
-    };
-    var handlers = args.handler;
-    if (handlers) {
-        config.handlers = {};
-        if (!Array.isArray(handlers)) {
-            handlers = [handlers];
-        }
-        for (var i = 0; i < handlers.length; i++) {
-            config.handlers[handlers[i]] = {};
+var webant = require("../lib/webant");
+var extend = require("extend");
+
+var config = {
+    entry:args.entry || undefined,
+    dest:args.dest || undefined,
+    urlDest:args.urlDest || undefined,
+    postProcess:args.postProcess || undefined,
+    handlers:args.handlers || undefined
+};
+
+if (typeof args.useConfig !== "undefined") {
+    if (typeof args.useConfig === "string") {
+        var configPath = path.resolve(args.useConfig);
+    } else {
+        var configPath = path.resolve("./webant-config.json");
+    }
+    var dir = path.dirname(configPath);
+    if (dir !== ".") {
+        try {
+            process.chdir(dir);
+        } catch(err) {
+            console.error("'useConfig' must be the filename of a configuration file in the " +
+                "current working directory. Using a configuration file from another directory is " +
+                "not supported.");
+            process.exit(1);
         }
     }
+    extend(true,require(configPath),config);
 }
 
 console.log("Compilation beginning");
 webant(config,function(err,data){
     if (err) {
-        console.log("Compilation unsuccessful");
+        console.error("Compilation unsuccessful");
         throw err;
         return;
     }
-    console.log("Compilation successful ["+data.numModules+" modules in "+data.numFiles+" files]");
+    console.log("Compilation successful ["+data.numModules+" modules over "+data.numFiles+" files]");
 });
