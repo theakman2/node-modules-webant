@@ -65,67 +65,56 @@ if (rareCondition) {
 
 ### Command line
 
-    $ webant [options]
-
 ```
-  --entry, -e      Path to entry script relative to current directory.
-  --dest, -d       Path to where compiled output will be written.
-  --urldest, -u    The URL of 'dest'.
-  --compress, -C   Compress compiled scripts.
-  --debug, -D      Output line numbers of original files in compiled scripts.
-  --handler, -H    Specify an additional handler to use. Can be used multiple
-                   times.
-  --useconfig, -c  Use the webant-config.json configuration in the current
-                   directory.
-  --version, -v    Print the version.
-  --help, -h       Display usage.
+Usage:
+  webant --useConfig [options]
+  webant --useConfig [path to config file] [options]
+  webant --entry [path to entry script] [options]
+
+Options:
+  --entry, -e        Path to entry script relative to current directory.
+                     [Required, unless --useConfig flag is set].
+  --dest, -d         Path to where compiled output will be written.
+  --urlDest, -u      URL at which the path specified for '--dest' can be
+                     reached.
+  --postProcess, -p  Post-processing to apply to compiled javascript. Can be
+                     either 'compress' (compresses output), 'debug' (adds file
+                     and line numbers to output) or 'none' (no post-processing).
+
+  --handlers, -H     Additional handlers to use. Can be set multiple times.
+                     Example: -H coffee -H scss -H json
+  --useConfig, -c    Path to a JSON configuration file which sets default
+                     options. If this option is set but no path is provided,
+                     the path is assumed to be './webant-config.json'.
+                     [Required, unless --entry option is provided]. [Additional
+                     options override those found in the configuration file].
+  --version, -v      Show version.
+  --help, -h         Show help.
 ```
 
 Example:
 
-    $ webant --entry src/js/main.js --dest build/js/main.js --urldest http://mysite.com/assets/js/main.js -C
+    $ webant --entry src/js/main.js --dest build/js/main.js --urlDest http://mysite.com/assets/js/main.js
     
-### Command line - with configuration file
-
-Create a JSON configuration file named `webant-config.json` in your project root. The configuration file should look like this:
-
-````json
-{
-    "entry":"src/js/main.js",
-    "dest":"build/js/main.js",
-    "urlDest":"http://localhost/path/to/build/js/main.js",
-    "mode":"normal"
-}
-````
-
-Then navigate to your project root and run `webant` with the `-c` flag set:
-
-    $ cd /path/to/project/root
-    $ webant -c
-    
-As long as you run the `webant` command in the same directory as the configuration file, it will automatically be picked up.
-
 ### Configuration file settings
 
-`entry` _(required)_
+If you pass the `--useConfig` option via the CLI, webant will assume the configuration file is a JSON file which looks like this:
 
-Path to the entry script relative to the configuration file's directory.
+```json
+{
+    "entry":"path/to/entry.js",
+    "dest":"path/to/build.js",
+    "urlDest":"http://mysite.com/assets/build.js",
+    "postProcess":"compress",
+    "handlers":["coffee","otherCustomHandler"]
+}
+```
 
-`dest`
-
-Path to the main destination file relative to the configuration file's directory.
-
-`urlDest`
-
-URL path to the main destination file.
-
-`mode`
-
-Can be `normal`, `debug` or `compress`. Defaults to `normal`. Set to `debug` to output line numbers in the compiled scripts. Set to `compress` to compress the compiled scripts.
+The keys are the same as those provided by the CLI, except paths are relative to the configuration file as opposed to the current working directory.
 
 ### Programmatically
 
-Install Webant locally:
+Install webant locally:
 
     $ npm install webant
 
@@ -143,7 +132,7 @@ webant(opts,function(err){
 });
 ````
 
-The `opts` parameter is an object with the same keys as the `webant-config.json` configuration file mentioned above.
+The `opts` parameter is an object that takes the same keys as the JSON configuration file mentioned above.
 
 ## Tests [![Build Status](https://travis-ci.org/theakman2/node-modules-webant.png?branch=master)](https://travis-ci.org/theakman2/node-modules-webant)
 

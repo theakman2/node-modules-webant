@@ -4,18 +4,18 @@ var path = require("path");
 
 var optimist = require("optimist")
     .usage(
-        "WEBANT, the intelligent javascript web bundler\n\n" +
+        "Webant: the intelligent javascript web bundler\n\n" +
         "Usage:\n" +
-        "  $0 --useConfig [options]\n" + 
-        "  $0 --useConfig [config filename] [options]\n" +
-        "  $0 --entry [path to entry script] [options]"
+        "  webant --useConfig [options]\n" + 
+        "  webant --useConfig [path to config file] [options]\n" +
+        "  webant --entry [path to entry script] [options]"
     )
     .describe("entry","Path to entry script relative to current directory. [Required, unless --useConfig flag is set].")
     .describe("dest","Path to where compiled output will be written.")
     .describe("urlDest","URL at which the path specified for '--dest' can be reached.")
     .describe("postProcess","Post-processing to apply to compiled javascript. Can be either 'compress' (compresses output), 'debug' (adds file and line numbers to output) or 'none' (no post-processing).")
     .describe("handlers","Additional handlers to use. Can be set multiple times. Example: -H coffee -H scss -H json")
-    .describe("useConfig","Filename of a JSON configuration file in the current directory which sets default options. If this option is set but no filename is provided, the filename is assumed to be 'webant-config.json'. [Required, unless --entry option is provided]. [Additional options override those found in the configuration file].")
+    .describe("useConfig","Path to a JSON configuration file which sets default options. If this option is set but no path is provided, the path is assumed to be './webant-config.json'. [Required, unless --entry option is provided]. [Additional options override those found in the configuration file].")
     .describe("version","Show version.")
     .describe("help","Show help.")
     .alias("entry","e")
