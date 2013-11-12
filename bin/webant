@@ -80,7 +80,7 @@ if (typeof args.useConfig !== "undefined") {
             process.exit(1);
         }
     }
-    extend(true,require(configPath),config);
+    config = extend(true,{},require(configPath),config);
 }
 
 console.log("Compilation beginning");
