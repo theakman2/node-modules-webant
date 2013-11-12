@@ -6,6 +6,7 @@ var requireWalk = require("../../lib/util/requireWalk.js");
 test("requireWalk 1",function(t){
 	var contents = [
 	                "require()",
+	                "require('foo'+'.js')",
 	                "require(foo)",
 	                "require(40)",
 	                "require({})",
@@ -14,8 +15,10 @@ test("requireWalk 1",function(t){
 	                "require(undefined)",
 	                "require(null)",
 	                "require([])",
+	                "require(['bar'+'.js','baz.j'+'s'])",
 	                "require([foo])",
 	                "require(['sdfs',foo])",
+	                "require('foo'+'.js',true)",
 	                "require(foo,function(){})",
 	                "require(40,'gsdgf')",
 	                "require({},true)",
@@ -24,6 +27,7 @@ test("requireWalk 1",function(t){
 	                "require(undefined,{})",
 	                "require(null,[])",
 	                "require([],true)",
+	                "require(['bar'+'.js','baz.j'+'s'],function(){})",
 	                "require([foo],'\"')",
 	                "require(['sdfs',foo],function(){})",
 	                ];

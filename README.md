@@ -5,13 +5,19 @@ _Bringing CommonJS-style requires to the browser and more._
 __Require javascript__
 
 ````javascript
-// path/to/foo.js
+/**
+ * path/to/foo.js
+ * Export a simple function
+ */
 module.exports.sayHello = function() {
     alert("Hello!");
 };
 ````
 
 ````javascript
+/**
+ * 'foo' contains the exports from ./path/to/foo.js
+ */
 var foo = require("./path/to/foo.js");
 foo.sayHello(); // alerts "Hello!"
 ````
@@ -19,6 +25,10 @@ foo.sayHello(); // alerts "Hello!"
 __Require javascript asynchronously__
 
 ````javascript
+/**
+ * 'foo' contains the exports from ./path/to/foo.js
+ * Webant also attempts to place './path/to/foo.js' in a separate file and load it only when necessary.
+ */
 require("./path/to/foo.js",function(foo){
     foo.sayHello();
 });
@@ -27,6 +37,9 @@ require("./path/to/foo.js",function(foo){
 __Require multiple javascripts asynchronously__
 
 ````javascript
+/**
+ * 'foo' and 'bar' contain the exports from ./path/to/foo.js and ./path/to/bar.js respectively
+ */
 require(["./path/to/foo.js","./path/to/bar.js"],function(foo,bar){
     foo.sayHello();
     bar.sayGoodbye();
@@ -36,10 +49,25 @@ require(["./path/to/foo.js","./path/to/bar.js"],function(foo,bar){
 __Require HTML, CSS, handlebars templates, JSON, stylus, LESS, SCSS...__
 
 ````javascript
-require("../path/to/styles.css"); // <style> tag injected into the DOM
+/**
+ * A <style> tag is automatically injected into the DOM and populated with the contents from ../path/to/styles.css
+ */
+require("../path/to/styles.css");
+
+/**
+ * 'tmpl' is a pre-compiled Handlebars template ready to be passed a data object.
+ */
 var tmpl = require("../path/to/handlebars/template.hbs");
+
+/**
+ * 'html' is now a string
+ */
 var html = tmpl({name:"Alan"});
-var json = require("data.json"); // JSON file parsed as javascript object 
+
+/**
+ * 'json' now contains the contents of 'data.json' parsed as a javascript object
+ */
+var json = require("data.json");
 alert(json.foo);
 ````
 
@@ -123,20 +151,72 @@ Then use webant as follows:
 ````javascript
 var webant = require("webant");
 
-webant(opts,function(err){
+webant(opts,function(err,data){
     if (err) {
         // webant has encountered an error
     } else {
         // webant has written the compiled javascript successfully
+        console.log(data.numModules + " modules encountered and " + data.numFiles + " files were written.");
     }
 });
 ````
 
 The `opts` parameter is an object that takes the same keys as the JSON configuration file mentioned above.
 
+## Why webant?
+
+There are already plenty of NodeJS modules available such as [webpack](https://github.com/webpack/webpack), [webmake](https://github.com/medikoo/modules-webmake) and [browserify](https://github.com/substack/node-browserify) that bundle javascript files for the web. Why another one? 
+
+### Synchronous and asynchronous
+
+Unlike webmake (v0.3) and browserify (v2.35), webant permits the use of both synchronous `require` calls (`var foo = require('foo.js');`) and asynchronous `require` calls (`require('foo.js',function(foo) { /* do something with foo */ });`).
+
+When you `require` a module asynchronously, webant intelligently tries to include the module in a separate file so it isn't included in the initial javascript loaded on the page - perfect for large modules that are only infrequently needed.
+
+### Simple to use
+
+Webpack (v0.11) is a web bundling module with a lot of options and features. This makes the module very powerful, but also makes it difficult to learn.
+
+Webant intentionally tries to keep things simple - the only variables webant introduces into your javascript code are `require`, `module` and `exports`, and these should be used in just the same way as they're used in NodeJS modules. The only exception is that webant augments the `require` function to allow for asynchronous module loading.
+
+### Well tested
+
+Webant is thoroughly tested with 85+ unit tests, many of which use a headless browser ([PhantomJS](http://phantomjs.org)) to ensure the module works in a browser environment.
+
+## Dynamic requires
+
+Webant only supports `require` calls where the first parameter is either a string literal or an array literal where every element is a string literal. For example, the following are all supported:
+
+````javascript
+var foo = require('foo.js');
+require('bar.js',function(bar){ bar.sayHello(); });
+var items = require(['foo.js','bar.js']);
+require(['foo.js','bar.js'],function(foo,bar){}); 
+````
+
+If webant encounters a `require` call where the first parameter is not a string literal or an array literal containing only string literals, an error will be thrown. This means `require` calls like these will throw errors:
+
+````javascript
+var foo = require('foo' + '.js'); // not allowed - will throw error
+
+var name = "foo.js";
+var foo = require(name); // not allowed - will throw error
+
+function getTemplate(tmplName,callback) {
+    require("../path/to/templates/" + tmplName + ".hbs",callback); // not allowed - will throw error
+}
+
+var item1 = "foo.js";
+var item2 = "bar.js";
+
+require([item1,item2]); // not allowed - will throw error
+````
+
+Webant may be augmented to support dynamic requires in future. 
+
 ## Tests [![Build Status](https://travis-ci.org/theakman2/node-modules-webant.png?branch=master)](https://travis-ci.org/theakman2/node-modules-webant)
 
-    Ensure [phantomjs](http://phantomjs.org) is installed and in your PATH, then run:
+Ensure [phantomjs](http://phantomjs.org) is installed and in your PATH, then run:
 
     $ npm test
 
