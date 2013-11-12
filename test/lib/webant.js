@@ -35,7 +35,10 @@ function doTest(testId,numChunksExpected,additionalOpts,cb) {
 					dest:path.join(destDir,"main.js"),
 					urlDest:"js/main.js"
 				},additionalOpts),function(err2){
-					t.ok(!err2,"There should be no errors compiling webant test "+testId);
+					if (err2) {
+						t.fail("Error encountered while compiling webant test " + testId + ": " + err2);
+						t.end();
+					}
 					
 					fs.readdir(destDir,function(err3,files){
 						if (err3) {
