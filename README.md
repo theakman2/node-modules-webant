@@ -136,6 +136,8 @@ The `opts` parameter is an object that takes the same keys as the JSON configura
 
 ## Tests [![Build Status](https://travis-ci.org/theakman2/node-modules-webant.png?branch=master)](https://travis-ci.org/theakman2/node-modules-webant)
 
+    Ensure [phantomjs](http://phantomjs.org) is installed and in your PATH, then run:
+
     $ npm test
 
 ## Acknowledgements

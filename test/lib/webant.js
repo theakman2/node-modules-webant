@@ -3,7 +3,7 @@ var path = require("path");
 var childProcess = require("child_process");
 
 var extend = require("extend");
-var phantomjs = require("phantomjs").path;
+var shellEscape = require("shell-escape");
 var test = require("tap").test;
 
 var webant = require("../../lib/webant.js");
@@ -67,9 +67,8 @@ function doTest(testId,numChunksExpected,additionalOpts,cb) {
 							"File count should match expected chunk count for webant test "+testId
 						);
 						
-						var pjs = childProcess.execFile(
-							phantomjs,
-							[phantomScript],
+						var pjs = childProcess.exec(
+							"phantomjs " + shellEscape([phantomScript]),
 							{
 								cwd:path.join(baseDir,testId),
 								maxBuffer:1024*1024
