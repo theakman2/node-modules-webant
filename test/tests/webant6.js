@@ -11,7 +11,7 @@ webantTester(6,4,{postProcess:"debug"},function(obj,srcDir,destDir,t){
 		height:571,
 		width:110
 	});
-	fs.readFile(destDir+"/main0.js",function(err,content){
+	fs.readFile(destDir+"/main.js",function(err,content){
 		t.ok(!err,"There should be no errors reading the first chunk.");
 		
 		var debugMsg = "//"+path.join(srcDir,"main.js")+": 1";

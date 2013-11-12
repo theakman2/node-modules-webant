@@ -8,6 +8,7 @@
 /test/webant/6/build/js/*
 /test/webant/7/build/js/*
 /test/webant/8/build/js/*
+/test/webant/9/build/js/*
 /playground
 .svn
 .project

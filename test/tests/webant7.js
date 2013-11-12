@@ -16,7 +16,7 @@ webantTester(7,4,{postProcess:"compress"},function(obj,srcDir,destDir,t){
 	});
 	
 	var files = [
-	             path.join(destDir,"main0.js"),
+	             path.join(destDir,"main.js"),
 	             path.join(destDir,"main1.js"),
 	             path.join(destDir,"main2.js"),
 	             path.join(destDir,"main3.js")

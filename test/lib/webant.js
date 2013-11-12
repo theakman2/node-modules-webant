@@ -55,7 +55,7 @@ function doTest(testId,numChunksExpected,additionalOpts,cb) {
 						
 						var expectedFiles = ["main.js"];
 						
-						for (var i = 0; i < numChunksExpected; i++) {
+						for (var i = 1; i < numChunksExpected; i++) {
 							expectedFiles.push("main"+i+".js");
 						}
 						
