@@ -4,7 +4,7 @@ var path = require("path");
 
 var optimist = require("optimist")
     .usage(
-        "Webant: the intelligent javascript web bundler\n\n" +
+        "Webant: the intelligent javascript web bundler - (c) 2013 A Kazim\n\n" +
         "Usage:\n" +
         "  webant --useConfig [options]\n" + 
         "  webant --useConfig [path to config file] [options]\n" +
