@@ -163,6 +163,22 @@ webant(opts,function(err,data){
 
 The `opts` parameter is an object that takes the same keys as the JSON configuration file mentioned above.
 
+## Handlers
+
+Handlers are NodeJS modules which take care of requiring different types of files. For example, webant has a built in CSS handler that makes it possible to require CSS files.
+
+A number of handlers are built in to webant:
+
+* [CSS](https://github.com/theakman2/node-modules-webant-handler-css)
+* [Handlebars](https://github.com/theakman2/node-modules-webant-handler-hbs)
+* [JavaScript](https://github.com/theakman2/node-modules-webant-handler-js)
+* [JSON](https://github.com/theakman2/node-modules-webant-handler-json)
+* [LESS](https://github.com/theakman2/node-modules-webant-handler-less)
+* [Micro-templates](https://github.com/theakman2/node-modules-webant-handler-mtmpl)
+* [SASS/SCSS](https://github.com/theakman2/node-modules-webant-handler-scss)
+* [Stylus](https://github.com/theakman2/node-modules-webant-handler-stylus)
+* [Text](https://github.com/theakman2/node-modules-webant-handler-text)
+
 ## Why webant?
 
 There are already plenty of NodeJS modules available such as [webpack](https://github.com/webpack/webpack), [webmake](https://github.com/medikoo/modules-webmake) and [browserify](https://github.com/substack/node-browserify) that bundle javascript files for the web. Why another one? 
