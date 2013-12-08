@@ -181,7 +181,7 @@ Webant intentionally tries to keep things simple - the only variables webant int
 
 ### Well tested
 
-Webant is thoroughly tested with 85+ unit tests, many of which use a headless browser ([PhantomJS](http://phantomjs.org)) to ensure the module works in a browser environment.
+Webant is thoroughly tested with 90+ unit tests, many of which use a headless browser ([PhantomJS](http://phantomjs.org)) to ensure the module works in a browser environment.
 
 ## Dynamic requires
 
