@@ -2,9 +2,11 @@
 
 var path = require("path");
 
+var version = require(__dirname+"/../package.json").version;
+
 var optimist = require("optimist")
     .usage(
-        "Webant: the intelligent javascript web bundler - (c) 2013 A Kazim\n\n" +
+        "Webant: the intelligent javascript web bundler (v" + version + ") - (c) 2013 A Kazim\n\n" +
         "Usage:\n" +
         "  webant --useConfig [options]\n" + 
         "  webant --useConfig [path to config file] [options]\n" +
@@ -14,6 +16,7 @@ var optimist = require("optimist")
     .describe("dest","Path to where compiled output will be written.")
     .describe("urlDest","URL at which the path specified for '--dest' can be reached.")
     .describe("postProcess","Post-processing to apply to compiled javascript. Can be either 'compress' (compresses output), 'debug' (adds file and line numbers to output) or 'none' (no post-processing).")
+    .describe("requireBase","Resolve require paths relative to the supplied directory instead of relative to the file containing the require.")
     .describe("handlers","Additional handlers to use. Can be set multiple times. Example: -H coffee -H scss -H json")
     .describe("useConfig","Path to a JSON configuration file which sets default options. If this option is set but no path is provided, the path is assumed to be './webant-config.json'. [Required, unless --entry option is provided]. [Additional options override those found in the configuration file].")
     .describe("version","Show version.")
@@ -22,6 +25,7 @@ var optimist = require("optimist")
     .alias("dest","d")
     .alias("urlDest","u")
     .alias("postProcess","p")
+    .alias("requireBase","r")
     .alias("handlers","H")
     .alias("useConfig","c")
     .alias("version","v")
@@ -43,7 +47,7 @@ if (args.help) {
 }
 
 if (args.version) {
-    console.log(require(__dirname+"/../package.json").version);
+    console.log(version);
     process.exit();
 }
 
@@ -60,6 +64,7 @@ var config = {
     dest:args.dest || undefined,
     urlDest:args.urlDest || undefined,
     postProcess:args.postProcess || undefined,
+    requireBase:args.requireBase || "",
     handlers:args.handlers || undefined
 };
 

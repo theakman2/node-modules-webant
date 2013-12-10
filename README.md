@@ -109,6 +109,8 @@ Options:
                      either 'compress' (compresses output), 'debug' (adds file
                      and line numbers to output) or 'none' (no post-processing).
 
+  --requireBase, -r  Resolve require paths relative to the supplied directory
+                     instead of relative to the file containing the require.
   --handlers, -H     Additional handlers to use. Can be set multiple times.
                      Example: -H coffee -H scss -H json
   --useConfig, -c    Path to a JSON configuration file which sets default
@@ -134,6 +136,7 @@ If you pass the `--useConfig` option via the CLI, webant will assume the configu
     "dest":"path/to/build.js",
     "urlDest":"http://mysite.com/assets/build.js",
     "postProcess":"compress",
+    "requireBase":"",
     "handlers":["coffee","otherCustomHandler"]
 }
 ```

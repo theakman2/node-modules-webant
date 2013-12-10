@@ -39,6 +39,7 @@ test("getConfig 2",function(t){
 			dest:path.resolve("/path/to/build/main.out.js"),
 			urlDest:"main.out.js",
 			postProcess:"none",
+			requireBase:"",
 		    handlers:{
 				css:{},
 				hbs:{},
@@ -72,6 +73,7 @@ test("getConfig 3",function(t){
 			dest:path.resolve("/path/to/src/js/main.out.js"),
 			urlDest:"main.out.js",
 			postProcess:"none",
+			requireBase:"",
 		    handlers:{
 				css:{},
 				hbs:{},
@@ -107,6 +109,7 @@ test("getConfig 4",function(t){
 			dest:path.resolve("/path/to/src/js/main.out.js"),
 			urlDest:"foo",
 			postProcess:"none",
+			requireBase:"",
 		    handlers:{
 				css:{},
 				hbs:{},
@@ -151,6 +154,7 @@ test("getConfig 5",function(t) {
 			dest:path.resolve("/path/to/src/js/main.out"),
 			urlDest:"foo",
 			postProcess:"none",
+			requireBase:"",
 		    handlers:{
 				css:{},
 				hbs:{},
@@ -191,6 +195,7 @@ test("getConfig 6",function(t) {
 			dest:path.resolve("/path/to/build/js/main"),
 			urlDest:"foo",
 			postProcess:"none",
+			requireBase:"",
 		    handlers:{
 				css:{},
 				hbs:{},
@@ -273,6 +278,40 @@ test("getConfig 7",function(t) {
 			handlers:[6e3]
 		});
 	});
+	
+	t.end();
+});
+
+test("getConfig 8",function(t) {
+	var rawConfig = {
+	    entry:"/path/to/src/js/main.js",
+	    requireBase:"."
+	};
+	
+	var settings = getConfig(rawConfig);
+	
+	t.equivalent(
+		settings,
+		{
+			entry:path.resolve("/path/to/src/js/main.js"),
+			dest:path.resolve("/path/to/src/js/main.out.js"),
+			urlDest:"main.out.js",
+			postProcess:"none",
+			requireBase:process.cwd(),
+		    handlers:{
+				css:{},
+				hbs:{},
+				js:{},
+				json:{},
+				mtmpl:{},
+				less:{},
+				scss:{},
+				stylus:{},
+				text:{}
+		    }
+		},
+		"Defaults should have been merged in properly."
+	);
 	
 	t.end();
 });

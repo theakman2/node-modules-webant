@@ -1,15 +1,6 @@
 /node_modules
 /npm-debug.log
-/test/webant/1/build/js/*
-/test/webant/2/build/js/*
-/test/webant/3/build/js/*
-/test/webant/4/build/js/*
-/test/webant/5/build/js/*
-/test/webant/6/build/js/*
-/test/webant/7/build/js/*
-/test/webant/8/build/js/*
-/test/webant/9/build/js/*
-/test/webant/10/build/js/*
+/test/webant/**/build/js/*
 /playground
 .svn
 .project
