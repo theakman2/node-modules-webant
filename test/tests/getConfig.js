@@ -39,6 +39,7 @@ test("getConfig 2",function(t){
 			dest:path.resolve("/path/to/build/main.out.js"),
 			urlDest:"main.out.js",
 			postProcess:"none",
+			defaultExtension:"",
 			requireBase:"",
 		    handlers:{
 				css:{},
@@ -73,6 +74,7 @@ test("getConfig 3",function(t){
 			dest:path.resolve("/path/to/src/js/main.out.js"),
 			urlDest:"main.out.js",
 			postProcess:"none",
+			defaultExtension:"",
 			requireBase:"",
 		    handlers:{
 				css:{},
@@ -109,6 +111,7 @@ test("getConfig 4",function(t){
 			dest:path.resolve("/path/to/src/js/main.out.js"),
 			urlDest:"foo",
 			postProcess:"none",
+			defaultExtension:"",
 			requireBase:"",
 		    handlers:{
 				css:{},
@@ -154,6 +157,7 @@ test("getConfig 5",function(t) {
 			dest:path.resolve("/path/to/src/js/main.out"),
 			urlDest:"foo",
 			postProcess:"none",
+			defaultExtension:"",
 			requireBase:"",
 		    handlers:{
 				css:{},
@@ -195,6 +199,7 @@ test("getConfig 6",function(t) {
 			dest:path.resolve("/path/to/build/js/main"),
 			urlDest:"foo",
 			postProcess:"none",
+			defaultExtension:"",
 			requireBase:"",
 		    handlers:{
 				css:{},
@@ -298,6 +303,42 @@ test("getConfig 8",function(t) {
 			urlDest:"main.out.js",
 			postProcess:"none",
 			requireBase:process.cwd(),
+			defaultExtension:"",
+		    handlers:{
+				css:{},
+				hbs:{},
+				js:{},
+				json:{},
+				mtmpl:{},
+				less:{},
+				scss:{},
+				stylus:{},
+				text:{}
+		    }
+		},
+		"Defaults should have been merged in properly."
+	);
+	
+	t.end();
+});
+
+test("getConfig 9",function(t) {
+	var rawConfig = {
+	    entry:"/src/js/main.js",
+	    defaultExtension:".coffee"
+	};
+	
+	var settings = getConfig(rawConfig);
+	
+	t.equivalent(
+		settings,
+		{
+			entry:path.resolve("/src/js/main.js"),
+			dest:path.resolve("/src/js/main.out.js"),
+			urlDest:"main.out.js",
+			postProcess:"none",
+			requireBase:"",
+			defaultExtension:".coffee",
 		    handlers:{
 				css:{},
 				hbs:{},

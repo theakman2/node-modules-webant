@@ -100,26 +100,30 @@ Usage:
   webant --entry [path to entry script] [options]
 
 Options:
-  --entry, -e        Path to entry script relative to current directory.
-                     [Required, unless --useConfig flag is set].
-  --dest, -d         Path to where compiled output will be written.
-  --urlDest, -u      URL at which the path specified for '--dest' can be
-                     reached.
-  --postProcess, -p  Post-processing to apply to compiled javascript. Can be
-                     either 'compress' (compresses output), 'debug' (adds file
-                     and line numbers to output) or 'none' (no post-processing).
-
-  --requireBase, -r  Resolve require paths relative to the supplied directory
-                     instead of relative to the file containing the require.
-  --handlers, -H     Additional handlers to use. Can be set multiple times.
-                     Example: -H coffee -H scss -H json
-  --useConfig, -c    Path to a JSON configuration file which sets default
-                     options. If this option is set but no path is provided,
-                     the path is assumed to be './webant-config.json'.
-                     [Required, unless --entry option is provided]. [Additional
-                     options override those found in the configuration file].
-  --version, -v      Show version.
-  --help, -h         Show help.
+  --entry, -e             Path to entry script relative to current directory.
+                          [Required, unless --useConfig flag is set].
+  --dest, -d              Path to where compiled output will be written.
+  --urlDest, -u           URL at which the path specified for '--dest' can be
+                          reached.
+  --postProcess, -p       Post-processing to apply to compiled javascript. Can
+                          be either 'compress' (compresses output), 'debug'
+                          (adds file and line numbers to output) or 'none' (no
+                          post-processing).
+  --requireBase, -r       Resolve require paths relative to the supplied
+                          directory instead of relative to the file containing
+                          the require.
+  --defaultExtension, -D  Default extension to append to a require path when no
+                          extension is provided.
+  --handlers, -H          Additional handlers to use. Can be set multiple
+                          times. Example: -H coffee -H scss -H json
+  --useConfig, -c         Path to a JSON configuration file which sets default
+                          options. If this option is set but no path is
+                          provided, the path is assumed to be
+                          './webant-config.json'. [Required, unless --entry
+                          option is provided]. [Additional options override
+                          those found in the configuration file].
+  --version, -v           Show version.
+  --help, -h              Show help.
 ```
 
 Example:
@@ -200,7 +204,7 @@ Webant intentionally tries to keep things simple - the only variables webant int
 
 ### Well tested
 
-Webant is thoroughly tested with 90+ unit tests, many of which use a headless browser ([PhantomJS](http://phantomjs.org)) to ensure the module works in a browser environment.
+Webant is thoroughly tested with 100+ unit tests, many of which use a headless browser ([PhantomJS](http://phantomjs.org)) to ensure the module works in a browser environment.
 
 ## Dynamic requires
 
