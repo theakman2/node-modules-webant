@@ -23,4 +23,6 @@ require("./nested1/f.js",function(f){
 			});
 		});
 	},600);
+	
+	window.__global.custom = require("@@MYCUSTOMHANDLER");
 });

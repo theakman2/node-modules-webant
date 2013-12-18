@@ -8,7 +8,7 @@ webantTester(
 	{
 		requireBase:path.join(__dirname,"..","webant","11","src")
 	},
-	function(obj,srcDir,destDir,t){
-		t.equivalent(obj,{a:150,b:175});
-		t.end();
+	function(obj,data,done){
+		data.t.equivalent(obj,{a:150,b:175});
+		done();
 });
