@@ -186,6 +186,106 @@ A number of handlers are built in to webant:
 * [Stylus](https://github.com/theakman2/node-modules-webant-handler-stylus)
 * [Text](https://github.com/theakman2/node-modules-webant-handler-text)
 
+### Using Handlers
+
+Handlers can be assigned with the `handlers` key via the CLI or the programmatic interface as follows:
+
+#### As a string
+
+Webant will attempt to require the module `webant-handler-<STRING>`. Example:
+
+````javascript
+{
+    "handlers":"coffee" // Webant calls 'require("webant-handler-coffee")'
+}
+````
+
+#### As an object
+
+````javascript
+{
+    "handlers":{
+        "coffee":{"compress":true}, // Webcant calls 'require("webant-handler-coffee")' and sets the 'compress' option on that handler to TRUE.
+        "foo":{"bar":"baz"} // Webant calls 'require("webant-handler-foo")' and sets the 'bar' option on that handler to 'baz'.
+    }
+}
+````
+
+#### Inline
+
+Custom handlers can be passed inline. See below for details on how to create custom handlers. Passing inline handlers is not possible over the CLI. Example:
+
+````javascript
+{
+    "handlers":{
+        "willHandle":function(filePath,settings) {},
+        "handle":function(filePath,settings,done){}
+    }
+}
+````
+
+#### As an array
+
+An array of strings, objects or inline handlers - for cases where it's necessary to include multiple additional handlers. Example:
+
+````javascript
+{
+    "handlers":[
+        "coffee",
+        {"foo":{"bar":"baz"}},
+        {"willHandle":function(){},"handle":function(){}}
+    ]
+}
+````
+
+### Creating Custom Handlers
+
+A webant handler is an object with the properties `willHandle` and `handle` defined, both of which are methods. As an example, let's walk through the JSON handler, which is built in to webant. This handler allows you to `require` JSON files.
+
+````javascript
+var fs = require("fs");
+var path = require("path");
+var url = require("url");
+
+module.exports = {
+    /**
+     * This method is called for each registered handler every time webant encounters a require call.
+     * @param string filePath - The resolved (absolute) file path of the require call, unless the item being required begins with '@@' (e.g. 'require("@@foo");'). In this case, webant doesn't attempt to resolve the item.
+     * @param object settings - Settings relevant to this handler, as set when a handler is passed as an object (see above).
+     * @return boolean - Is this handler responsible for parsing this require call?
+     */
+    willHandle:function(filePath,settings){
+        if (url.parse(filePath,false,true).host) {
+            return false;
+        }
+        if (filePath.indexOf("@@") === 0) {
+            return false;
+        }
+        if (path.extname(filePath) === ".json") {
+            return true;
+        }
+        return false;                
+    },
+    /**
+     * Webant calls this method for a particular require call if the 'willHandle' method returns TRUE for that require call.
+     * @param string filePath - The resolved (absolute) file path of the require call, unless the item being required begins with '@@' (e.g. 'require("@@foo");'). In this case, webant doesn't attempt to resolve the item.
+     * @param object settings - Settings relevant to this handler, as set when a handler is passed as an object (see above).
+     * @param function done(error,javascript) - A callback to be called once ready. The first parameter of the callback is reserved for errors, and the second should be a string of javascript.
+     */
+    handle:function(filePath,settings,done){
+        fs.readFile(filePath,function(e,c){
+            if (e) {
+                done(e);
+                return;
+            }
+            done(null,"module.exports = "+c.toString().trim()+";");
+        });
+    }
+};
+````
+
+Once you've prepared your custom handler, you can pass it inline, or publish it to the NPM registry and pass it as a string or object (see above).
+
 ## Why webant?
 
 There are already plenty of NodeJS modules available such as [webpack](https://github.com/webpack/webpack), [webmake](https://github.com/medikoo/modules-webmake) and [browserify](https://github.com/substack/node-browserify) that bundle javascript files for the web. Why another one? 
