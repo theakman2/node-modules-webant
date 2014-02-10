@@ -1,6 +1,6 @@
 {
     "name": "webant",
-    "version": "2.0.3",
+    "version": "2.1.0",
     "description": "Bringing CommonJS-style requires to the browser and more.",
     "keywords":[
        "ant",
@@ -34,7 +34,7 @@
         "extend":"1.2.x",
         "js-string-escape":"1.0.x",
         "webant-handler-css": "~1.0.0",
-        "webant-handler-hbs": "~1.0.0",
+        "webant-handler-hbs": "~1.1.1",
         "webant-handler-js": "~1.0.0",
         "webant-handler-json": "~1.0.0",
         "webant-handler-mtmpl":"~1.0.0",
