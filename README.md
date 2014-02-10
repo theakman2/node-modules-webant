@@ -113,7 +113,8 @@ Options:
                           directory instead of relative to the file containing
                           the require.
   --defaultExtension, -D  Default extension to append to a require path when no
-                          extension is provided.
+                          extension is provided. Include the starting period
+                          (i.e. '.js').
   --handlers, -H          Additional handlers to use. Can be set multiple
                           times. Example: -H coffee -H scss -H json
   --useConfig, -c         Path to a JSON configuration file which sets default

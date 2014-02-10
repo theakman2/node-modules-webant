@@ -51,7 +51,7 @@ test("getConfig 2",function(t){
 			dest:path.resolve("/path/to/build/main.out.js"),
 			urlDest:"main.out.js",
 			postProcess:"none",
-			defaultExtension:"",
+			defaultExtension:".js",
 			requireBase:"",
 			handlers:[
 			          handlers.css,
@@ -91,7 +91,7 @@ test("getConfig 3",function(t){
 			dest:path.resolve("/path/to/src/js/main.out.js"),
 			urlDest:"main.out.js",
 			postProcess:"none",
-			defaultExtension:"",
+			defaultExtension:".js",
 			requireBase:"",
 			handlers:[
 			          handlers.css,
@@ -143,7 +143,7 @@ test("getConfig 4",function(t){
 			dest:path.resolve("/path/to/src/js/main.out.js"),
 			urlDest:"foo",
 			postProcess:"none",
-			defaultExtension:"",
+			defaultExtension:".js",
 			requireBase:"",
 			handlers:[
 			          handlers.css,
@@ -212,7 +212,7 @@ test("getConfig 5",function(t){
 			dest:path.resolve("/path/to/src/js/main.out.js"),
 			urlDest:"foo",
 			postProcess:"none",
-			defaultExtension:"",
+			defaultExtension:".js",
 			requireBase:"",
 			handlers:[
 			          handlers.css,
@@ -266,7 +266,7 @@ test("getConfig 6",function(t) {
 			dest:path.resolve("/path/to/build/js/main"),
 			urlDest:"foo",
 			postProcess:"none",
-			defaultExtension:"",
+			defaultExtension:".js",
 			requireBase:"",
 			handlers:[
 			          handlers.css,
@@ -376,7 +376,7 @@ test("getConfig 8",function(t) {
 			urlDest:"main.out.js",
 			postProcess:"none",
 			requireBase:process.cwd(),
-			defaultExtension:"",
+			defaultExtension:".js",
 			handlers:[
 			          handlers.css,
 			          handlers.hbs,
