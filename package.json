@@ -1,6 +1,6 @@
 {
     "name": "webant",
-    "version": "2.2.0",
+    "version": "3.0.0",
     "description": "Bringing CommonJS-style requires to the browser and more.",
     "keywords":[
        "ant",
@@ -27,25 +27,16 @@
     "author": "A Kazim",
     "license": "MIT",
     "dependencies": {
-        "optimist":"0.6.x",
-        "fs-extra": "0.6.x",
-        "async": "~0.2.9",
-        "uglify-js": "~2.4.0",
-        "extend":"1.2.x",
-        "js-string-escape":"1.0.x",
-        "webant-handler-css": "~1.0.0",
-        "webant-handler-hbs": "~1.1.1",
-        "webant-handler-js": "~1.0.0",
-        "webant-handler-json": "~1.0.0",
-        "webant-handler-mtmpl":"~1.0.0",
-        "webant-handler-less": "~1.1.0",
-        "webant-handler-scss": "~1.1.0",
-        "webant-handler-stylus": "~1.1.0",
-        "webant-handler-text": "~1.0.0"
+        "optimist":"~0.6.1",
+        "fs-extra": "~0.8.1",
+        "async": "~0.2.10",
+        "uglify-js": "~2.4.12",
+        "extend":"~1.2.1",
+        "js-string-escape":"~1.0.0"
     },
     "devDependencies": {
-        "shell-escape":"0.0.x",
-        "tap": "0.4.x"
+        "shell-escape":"~0.1.0",
+        "tap": "~0.4.8"
     },
     "repository":"git://github.com/theakman2/node-modules-webant.git",
     "bin": "./bin/webant",

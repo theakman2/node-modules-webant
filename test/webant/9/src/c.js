@@ -1,1 +1,0 @@
-module.exports.foo = require("./nested/e.js");

@@ -71,6 +71,8 @@ var json = require("data.json");
 alert(json.foo);
 ````
 
+NB: the appropriate handlers must be installed to `require` files other than javascript. Handlers are described below.
+
 __Require files synchronously and asynchronously__
 
 ````javascript
@@ -84,6 +86,8 @@ if (rareCondition) {
     });
 }
 ````
+
+NB: the appropriate handlers must be installed to `require` files other than javascript. Handlers are described below.
 
 ## Installation
 
@@ -173,9 +177,11 @@ The `opts` parameter is an object that takes the same keys as the JSON configura
 
 ## Handlers
 
-Handlers are NodeJS modules which take care of requiring different types of files. For example, webant has a built in CSS handler that makes it possible to require CSS files.
+By default, webant only allows you to `require` javascript files. You have to install the appropriate *handler* to `require` additional types of files.
 
-A number of handlers are built in to webant:
+Handlers are NodeJS modules which take care of requiring different types of files. For example, the JSON handler allows you to `require` JSON files.
+
+A wide variety of handlers are officially being maintained:
 
 * [CSS](https://github.com/theakman2/node-modules-webant-handler-css)
 * [Handlebars](https://github.com/theakman2/node-modules-webant-handler-hbs)
@@ -297,15 +303,9 @@ Unlike webmake (v0.3) and browserify (v2.35), webant permits the use of both syn
 
 When you `require` a module asynchronously, webant intelligently tries to include the module in a separate file so it isn't included in the initial javascript loaded on the page - perfect for large modules that are only infrequently needed.
 
-### Simple to use
-
-Webpack (v0.11) is a web bundling module with a lot of options and features. This makes the module very powerful, but also makes it difficult to learn.
-
-Webant intentionally tries to keep things simple - the only variables webant introduces into your javascript code are `require`, `module` and `exports`, and these should be used in just the same way as they're used in NodeJS modules. The only exception is that webant augments the `require` function to allow for asynchronous module loading.
-
 ### Well tested
 
-Webant is thoroughly tested with 170+ unit tests, most of which use a headless browser ([PhantomJS](http://phantomjs.org)) to ensure the module works in a browser environment as intended.
+Webant is thoroughly tested with 160+ unit tests, most of which use a headless browser ([PhantomJS](http://phantomjs.org)) to ensure the module works in a browser environment as intended.
 
 ## Dynamic requires
 

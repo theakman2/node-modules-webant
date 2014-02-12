@@ -4,17 +4,7 @@ var path = require("path");
 
 var getConfig = require("../../lib/getConfig.js");
 
-var handlers = {
-	css:require("webant-handler-css"),
-	hbs:require("webant-handler-hbs"),
-	json:require("webant-handler-json"),
-	less:require("webant-handler-less"),
-	scss:require("webant-handler-scss"),
-	stylus:require("webant-handler-stylus"),
-	text:require("webant-handler-text"),
-	js:require("webant-handler-js"),
-	mtmpl:require("webant-handler-mtmpl")
-};
+var jsHandler = require("../../lib/jsHandler.js");
 
 test("getConfig 1",function(t){
 	var rawConfig = {
@@ -53,17 +43,7 @@ test("getConfig 2",function(t){
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
-			handlers:[
-			          handlers.css,
-			          handlers.hbs,
-			          handlers.json,
-			          handlers.less,
-			          handlers.scss,
-			          handlers.stylus,
-			          handlers.text,
-			          handlers.js,
-			          handlers.mtmpl
-			          ]
+			handlers:[jsHandler]
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -94,15 +74,7 @@ test("getConfig 3",function(t){
 			defaultExtension:".js",
 			requireBase:"",
 			handlers:[
-			          handlers.css,
-			          handlers.hbs,
-			          handlers.json,
-			          handlers.less,
-			          handlers.scss,
-			          handlers.stylus,
-			          handlers.text,
-			          handlers.js,
-			          handlers.mtmpl,
+			          jsHandler,
 			          extraHandler
 			          ]
 		},
@@ -146,15 +118,7 @@ test("getConfig 4",function(t){
 			defaultExtension:".js",
 			requireBase:"",
 			handlers:[
-			          handlers.css,
-			          handlers.hbs,
-			          handlers.json,
-			          handlers.less,
-			          handlers.scss,
-			          handlers.stylus,
-			          handlers.text,
-			          handlers.js,
-			          handlers.mtmpl,
+			          jsHandler,
 			          foo,
 			          bar,
 			          baz
@@ -166,133 +130,7 @@ test("getConfig 4",function(t){
 	t.end();
 });
 
-test("getConfig 5",function(t){
-	function f1(){};
-	function f2(){};
-	
-	var foo = {
-		willHandle:f1,
-		handle:f2
-	};
-	
-	var bar = {
-		handle:f2,
-		willHandle:f1
-	};
-	
-	var baz = {
-		handle:f1,
-		willHandle:f2
-	};
-	
-	var rawConfig = {
-	    entry:"/path/to/src/js/main.js",
-	    urlDest:"foo",
-	    handlers:[
-	              handlers.less,
-	              foo,
-	              bar,
-	              baz,
-	              bar,
-	              "scss",
-	              {
-	            	  text:{
-	            		  hey:"there"
-	            	  }
-	              }
-	              ]
-	};
-	
-	var settings = getConfig(rawConfig);
-	
-	t.equivalent(
-		settings,
-		{
-			entry:path.resolve("/path/to/src/js/main.js"),
-			dest:path.resolve("/path/to/src/js/main.out.js"),
-			urlDest:"foo",
-			postProcess:"none",
-			defaultExtension:".js",
-			requireBase:"",
-			handlers:[
-			          handlers.css,
-			          handlers.hbs,
-			          handlers.json,
-			          handlers.less,
-			          handlers.scss,
-			          handlers.stylus,
-			          {
-			        	  willHandle:handlers.text.willHandle,
-			        	  handle:handlers.text.handle,
-			        	  defaultSettings:{
-			        		  hey:"there"
-			        	  }
-			          },
-			          handlers.js,
-			          handlers.mtmpl,
-			          {
-			        	  willHandle:f1,
-			        	  handle:f2,
-			        	  defaultSettings:{}
-			          },
-			          bar,
-			          baz
-			          ]
-		},
-		"Defaults should have been merged in properly."
-	);
-	
-	t.end();
-});
-
-test("getConfig 6",function(t) {
-	var rawConfig = {
-	    entry:"/path/to/src/js/main",
-	    dest:"/path/to/build/js/main",
-	    urlDest:"foo",
-	    handlers:{
-	    	hbs:{
-	    		includeFoo:"barit"
-	    	}
-	    }
-	};
-	
-	var settings = getConfig(rawConfig);
-	
-	t.equivalent(
-		settings,
-		{
-			entry:path.resolve("/path/to/src/js/main"),
-			dest:path.resolve("/path/to/build/js/main"),
-			urlDest:"foo",
-			postProcess:"none",
-			defaultExtension:".js",
-			requireBase:"",
-			handlers:[
-			          handlers.css,
-			          {
-			        	  willHandle:handlers.hbs.willHandle,
-			        	  handle:handlers.hbs.handle,
-			        	  defaultSettings:{
-			        		  includeFoo:"barit"
-			        	  }
-			          },
-			          handlers.json,
-			          handlers.less,
-			          handlers.scss,
-			          handlers.stylus,
-			          handlers.text,
-			          handlers.js,
-			          handlers.mtmpl
-			          ]
-		},
-		"Defaults should have been merged in properly."
-	);
-	
-	t.end();
-});
-
-test("getConfig 7",function(t) {
+test("getConfig 5",function(t) {
 	t.throws(function(){
 		getConfig({});
 	});
@@ -360,7 +198,7 @@ test("getConfig 7",function(t) {
 	t.end();
 });
 
-test("getConfig 8",function(t) {
+test("getConfig 6",function(t) {
 	var rawConfig = {
 	    entry:"/path/to/src/js/main.js",
 	    requireBase:"."
@@ -377,17 +215,7 @@ test("getConfig 8",function(t) {
 			postProcess:"none",
 			requireBase:process.cwd(),
 			defaultExtension:".js",
-			handlers:[
-			          handlers.css,
-			          handlers.hbs,
-			          handlers.json,
-			          handlers.less,
-			          handlers.scss,
-			          handlers.stylus,
-			          handlers.text,
-			          handlers.js,
-			          handlers.mtmpl
-			          ]
+			handlers:[jsHandler]
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -395,7 +223,7 @@ test("getConfig 8",function(t) {
 	t.end();
 });
 
-test("getConfig 9",function(t) {
+test("getConfig 7",function(t) {
 	var rawConfig = {
 	    entry:"/src/js/main.js",
 	    defaultExtension:".coffee"
@@ -412,17 +240,7 @@ test("getConfig 9",function(t) {
 			postProcess:"none",
 			requireBase:"",
 			defaultExtension:".coffee",
-			handlers:[
-			          handlers.css,
-			          handlers.hbs,
-			          handlers.json,
-			          handlers.less,
-			          handlers.scss,
-			          handlers.stylus,
-			          handlers.text,
-			          handlers.js,
-			          handlers.mtmpl
-			          ]
+			handlers:[jsHandler]
 		},
 		"Defaults should have been merged in properly."
 	);

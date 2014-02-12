@@ -1,0 +1,1 @@
+module.exports.msg = require("../../c.js").foo + require("./d.js");

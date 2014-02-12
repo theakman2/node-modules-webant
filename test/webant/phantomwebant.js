@@ -7,5 +7,5 @@ page.open("./build/index.html",function(status){
 		});
 		console.log(JSON.stringify(g));
 		phantom.exit();
-	},3000);
+	},2000);
 });

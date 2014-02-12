@@ -1,1 +1,0 @@
-module.exports = require("a.js")+"BBB"+require("./a.js");

@@ -1,0 +1,1 @@
+module.exports = "ff" + require("bar/g.js");
