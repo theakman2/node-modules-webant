@@ -71,6 +71,16 @@ function doTest(opts,cb) {
 						},
 						function(err4,stdout,stderr) {
 							pjs.kill();
+							if (err4) {
+								t.fail("phantomjs reports an error: " + err4);
+								t.end();
+								return;
+							}
+							if (stderr) {
+								t.fail("phantomjs reports content in stderror: " + stderr);
+								t.end();
+								return;
+							}
 							var obj;
 							try {
 								obj = JSON.parse(stdout.trim());
