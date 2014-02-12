@@ -75,7 +75,7 @@ function doTest(opts,cb) {
 							try {
 								obj = JSON.parse(stdout.trim());
 							} catch(e) {
-								t.fail("Could not JSON.parse() stdout for webant test " + testName);
+								t.fail("Could not JSON.parse() stdout for webant test " + testName + " [stdout is: " + stdout + "]");
 								t.end();
 								return;
 							}
