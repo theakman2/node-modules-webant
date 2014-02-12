@@ -1,6 +1,6 @@
 {
     "name": "webant",
-    "version": "3.0.0-beta3",
+    "version": "3.0.0-beta4",
     "description": "Bringing CommonJS-style requires to the browser and more.",
     "keywords":[
        "ant",
@@ -35,7 +35,7 @@
         "js-string-escape":"~1.0.0"
     },
     "devDependencies": {
-        "shell-escape":"~0.1.0",
+        "shell-escape":"~0.0.1",
         "tap": "~0.4.8"
     },
     "repository":"git://github.com/theakman2/node-modules-webant.git",

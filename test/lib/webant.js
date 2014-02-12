@@ -64,7 +64,7 @@ function doTest(opts,cb) {
                     );
 					
 					var pjs = childProcess.exec(
-						'phantomjs "' + shellEscape([phantomScript]) + '"',
+						'phantomjs ' + shellEscape([phantomScript]),
 						{
 							cwd:path.join(baseDir,opts.testId),
 							maxBuffer:1024*1024
