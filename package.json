@@ -1,6 +1,6 @@
 {
     "name": "webant",
-    "version": "3.0.0-beta4",
+    "version": "3.0.0",
     "description": "Bringing CommonJS-style requires to the browser and more.",
     "keywords":[
        "ant",
