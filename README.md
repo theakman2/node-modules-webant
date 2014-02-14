@@ -183,14 +183,27 @@ Handlers are NodeJS modules which take care of requiring different types of file
 
 A wide variety of handlers are officially being maintained:
 
+#### CSS
+
 * [CSS](https://github.com/theakman2/node-modules-webant-handler-css)
-* [Handlebars](https://github.com/theakman2/node-modules-webant-handler-hbs)
-* [JavaScript](https://github.com/theakman2/node-modules-webant-handler-js)
-* [JSON](https://github.com/theakman2/node-modules-webant-handler-json)
 * [LESS](https://github.com/theakman2/node-modules-webant-handler-less)
-* [Micro-templates](https://github.com/theakman2/node-modules-webant-handler-mtmpl)
 * [SASS/SCSS](https://github.com/theakman2/node-modules-webant-handler-scss)
 * [Stylus](https://github.com/theakman2/node-modules-webant-handler-stylus)
+
+#### Javascript
+
+* CoffeeScript *(coming soon)*
+* TypeScript *(coming soon)*
+
+#### Templating
+
+* [DustJS](https://github.com/theakman2/node-modules-webant-handler-dustjs)
+* [Handlebars](https://github.com/theakman2/node-modules-webant-handler-hbs)
+* [Micro-templates](https://github.com/theakman2/node-modules-webant-handler-mtmpl)
+
+#### Other
+
+* [JSON](https://github.com/theakman2/node-modules-webant-handler-json)
 * [Text](https://github.com/theakman2/node-modules-webant-handler-text)
 
 ### Using Handlers
