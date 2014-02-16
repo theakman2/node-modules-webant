@@ -64,13 +64,13 @@ var webant = require("../lib/webant");
 var extend = require("extend");
 
 var config = {
-    entry:args.entry || undefined,
-    dest:args.dest || undefined,
-    urlDest:args.urlDest || undefined,
-    postProcess:args.postProcess || undefined,
-    requireBase:args.requireBase || undefined,
-    defaultExtension:args.defaultExtension || undefined,
-    handlers:args.handlers || undefined
+    entry:args.entry,
+    dest:args.dest,
+    urlDest:args.urlDest,
+    postProcess:args.postProcess,
+    requireBase:args.requireBase,
+    defaultExtension:args.defaultExtension,
+    handlers:Array.isArray(args.handlers) ? args.handlers : [args.handlers]
 };
 
 if (typeof args.useConfig !== "undefined") {
