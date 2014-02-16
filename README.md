@@ -10,7 +10,7 @@ __Require javascript__
  * Export a simple function
  */
 module.exports.sayHello = function() {
-    alert("Hello!");
+	alert("Hello!");
 };
 ````
 
@@ -30,7 +30,7 @@ __Require javascript asynchronously__
  * Webant also attempts to place './path/to/foo.js' in a separate file and load it only when necessary.
  */
 require("./path/to/foo.js",function(foo){
-    foo.sayHello();
+	foo.sayHello();
 });
 ````
 
@@ -41,8 +41,8 @@ __Require multiple javascripts asynchronously__
  * 'foo' and 'bar' contain the exports from ./path/to/foo.js and ./path/to/bar.js respectively
  */
 require(["./path/to/foo.js","./path/to/bar.js"],function(foo,bar){
-    foo.sayHello();
-    bar.sayGoodbye();
+	foo.sayHello();
+	bar.sayGoodbye();
 });
 ````
 
@@ -78,12 +78,12 @@ __Require files synchronously and asynchronously__
 ````javascript
 require("../styles.scss");
 if (rareCondition) {
-    require(["path/to/huge/library.js","./template.hbs"],function(lib,tmpl){
-        lib.doSomething();
-        var html = tmpl({foo:"bar"});
-        var data = require("../the/data.json");
-        console.log(data.aKey);
-    });
+	require(["path/to/huge/library.js","./template.hbs"],function(lib,tmpl){
+		lib.doSomething();
+		var html = tmpl({foo:"bar"});
+		var data = require("../the/data.json");
+		console.log(data.aKey);
+	});
 }
 ````
 
@@ -91,7 +91,7 @@ NB: the appropriate handlers must be installed to `require` files other than jav
 
 ## Installation
 
-    $ npm install webant -g
+	$ npm install webant -g
 
 ## Usage
 
@@ -102,6 +102,9 @@ Usage:
   webant --useConfig [options]
   webant --useConfig [path to config file] [options]
   webant --entry [path to entry script] [options]
+
+Example:
+  webant --entry src/js/main.js --dest build/js/main.js
 
 Options:
   --entry, -e             Path to entry script relative to current directory.
@@ -131,22 +134,18 @@ Options:
   --help, -h              Show help.
 ```
 
-Example:
-
-    $ webant --entry src/js/main.js --dest build/js/main.js --urlDest http://mysite.com/assets/js/main.js
-    
 ### Configuration file settings
 
 If you pass the `--useConfig` option via the CLI, webant will assume the configuration file is a JSON file which looks like this:
 
 ```json
 {
-    "entry":"path/to/entry.js",
-    "dest":"path/to/build.js",
-    "urlDest":"http://mysite.com/assets/build.js",
-    "postProcess":"compress",
-    "requireBase":"",
-    "handlers":["coffee","otherCustomHandler"]
+	"entry":"path/to/entry.js",
+	"dest":"path/to/build.js",
+	"urlDest":"http://mysite.com/assets/build.js",
+	"postProcess":"compress",
+	"requireBase":"",
+	"handlers":["coffee","otherCustomHandler"]
 }
 ```
 
@@ -156,7 +155,7 @@ The keys are the same as those provided by the CLI, except paths are relative to
 
 Install webant locally:
 
-    $ npm install webant
+	$ npm install webant
 
 Then use webant as follows:
 
@@ -164,12 +163,12 @@ Then use webant as follows:
 var webant = require("webant");
 
 webant(opts,function(err,data){
-    if (err) {
-        // webant has encountered an error
-    } else {
-        // webant has written the compiled javascript successfully
-        console.log(data.numModules + " modules encountered and " + data.numFiles + " files were written.");
-    }
+	if (err) {
+		// webant has encountered an error
+	} else {
+		// webant has written the compiled javascript successfully
+		console.log(data.numModules + " modules encountered and " + data.numFiles + " files were written.");
+	}
 });
 ````
 
@@ -208,103 +207,74 @@ A wide variety of handlers are officially being maintained:
 
 ### Using Handlers
 
-Handlers can be assigned with the `handlers` key via the CLI or the programmatic interface as follows:
+Handlers can be assigned to the `handlers` configuration key in three ways:
 
-#### As a string
-
-Webant will attempt to require the module `webant-handler-<STRING>`. Example:
-
-````javascript
+```javascript
 {
-    "handlers":"coffee" // Webant calls 'require("webant-handler-coffee")'
+	"handlers":[
+		/**
+		 * As a string.
+		 * Webant calls `require("webant-handler-less")`.
+		 */
+		"less",
+		
+		/**
+		 * As a two-element array.
+		 * Webant calls `require("webant-handler-scss")` and sets the `compress` setting on the handler to `true`.  
+		 */
+		["scss",{"compress":true}],
+		
+		/**
+		 * Inline, as an object containing an `extensions` property and a `handle` method.
+		 * Webant will call the `handle` method on this object every time it encounters a `require` call to a file with the `.hbs` extension.
+		 */
+		{
+			"extensions":".hbs",
+			"handle":function(filePath,done){
+				fs.readFile(filePath,function(err,contents){
+					if (err) {
+						done(err);
+						return;
+					}
+					done(null,'module.exports = ' + Handlebars.compile(contents.toString()));
+				});
+			}
+		}
+	]
 }
-````
-
-#### As an object
-
-````javascript
-{
-    "handlers":{
-        "coffee":{"compress":true}, // Webcant calls 'require("webant-handler-coffee")' and sets the 'compress' option on that handler to TRUE.
-        "foo":{"bar":"baz"} // Webant calls 'require("webant-handler-foo")' and sets the 'bar' option on that handler to 'baz'.
-    }
-}
-````
-
-#### Inline
-
-Custom handlers can be passed inline. See below for details on how to create custom handlers. Passing inline handlers is not possible over the CLI. Example:
-
-````javascript
-{
-    "handlers":{
-        "willHandle":function(filePath,settings) {},
-        "handle":function(filePath,settings,done){}
-    }
-}
-````
-
-#### As an array
-
-An array of strings, objects or inline handlers - for cases where it's necessary to include multiple additional handlers. Example:
-
-````javascript
-{
-    "handlers":[
-        "coffee",
-        {"foo":{"bar":"baz"}},
-        {"willHandle":function(){},"handle":function(){}}
-    ]
-}
-````
+```
 
 ### Creating Custom Handlers
 
-A webant handler is an object with the properties `willHandle` and `handle` defined, both of which are methods. As an example, let's walk through the JSON handler, which is built in to webant. This handler allows you to `require` JSON files.
+A webant handler is an object with an `extensions` property and a `handle` method defined.
+
+Here is an example of a handler that allows you to `require` JSON files.
 
 ````javascript
 var fs = require("fs");
-var path = require("path");
-var url = require("url");
 
 module.exports = {
-    /**
-     * This method is called for each registered handler every time webant encounters a require call.
-     * @param string filePath - The resolved (absolute) file path of the require call, unless the item being required begins with '@@' (e.g. 'require("@@foo");'). In this case, webant doesn't attempt to resolve the item.
-     * @param object settings - Settings relevant to this handler, as set when a handler is passed as an object (see above).
-     * @return boolean - Is this handler responsible for parsing this require call?
-     */
-    willHandle:function(filePath,settings){
-        if (url.parse(filePath,false,true).host) {
-            return false;
-        }
-        if (filePath.indexOf("@@") === 0) {
-            return false;
-        }
-        if (path.extname(filePath) === ".json") {
-            return true;
-        }
-        return false;                
-    },
-    /**
-     * Webant calls this method for a particular require call if the 'willHandle' method returns TRUE for that require call.
-     * @param string filePath - The resolved (absolute) file path of the require call, unless the item being required begins with '@@' (e.g. 'require("@@foo");'). In this case, webant doesn't attempt to resolve the item.
-     * @param object settings - Settings relevant to this handler, as set when a handler is passed as an object (see above).
-     * @param function done(error,javascript) - A callback to be called once ready. The first parameter of the callback is reserved for errors, and the second should be a string of javascript.
-     */
-    handle:function(filePath,settings,done){
-        fs.readFile(filePath,function(e,c){
-            if (e) {
-                done(e);
-                return;
-            }
-            done(null,"module.exports = "+c.toString().trim()+";");
-        });
-    }
+	/**
+	 * A string or array of strings indicating the file extensions this handler is responsible for.
+	 */
+	extensions:".json",
+	
+	/**
+	 * Called for every `require` call that this handler is responsible for.
+	 * @param string filePath - The absolute file path of the require call.
+	 * @param function done(error,javascript) - A callback to be called once ready. The first parameter of the callback is reserved for errors, and the second should be a string of javascript.
+	 */
+	handle:function(filePath,done){
+		fs.readFile(filePath,function(e,c){
+			if (e) {
+				done(e);
+				return;
+			}
+			done(null,"module.exports = "+c.toString().trim()+";");
+		});
+	}
 };
 ````
-
-Once you've prepared your custom handler, you can pass it inline, or publish it to the NPM registry and pass it as a string or object (see above).
 
 ## Why webant?
 
@@ -318,7 +288,7 @@ When you `require` a module asynchronously, webant intelligently tries to includ
 
 ### Well tested
 
-Webant is thoroughly tested with 160+ unit tests, most of which use a headless browser ([PhantomJS](http://phantomjs.org)) to ensure the module works in a browser environment as intended.
+Webant is thoroughly tested with 150+ unit tests, most of which use a headless browser ([PhantomJS](http://phantomjs.org)) to ensure the module works in a browser environment as intended.
 
 ## Dynamic requires
 
@@ -340,7 +310,7 @@ var name = "foo.js";
 var foo = require(name); // not allowed - will throw error
 
 function getTemplate(tmplName,callback) {
-    require("../path/to/templates/" + tmplName + ".hbs",callback); // not allowed - will throw error
+	require("../path/to/templates/" + tmplName + ".hbs",callback); // not allowed - will throw error
 }
 
 var item1 = "foo.js";
@@ -355,7 +325,7 @@ Webant may be augmented to support dynamic requires in future.
 
 Ensure [phantomjs](http://phantomjs.org) is installed and in your PATH, then run:
 
-    $ npm test
+	$ npm test
 
 ## Acknowledgements
 

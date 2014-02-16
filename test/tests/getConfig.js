@@ -43,7 +43,8 @@ test("getConfig 2",function(t){
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
-			handlers:[jsHandler]
+			handlers:{".js":jsHandler},
+			aliases:{}
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -53,13 +54,13 @@ test("getConfig 2",function(t){
 
 test("getConfig 3",function(t){
 	var extraHandler = {
-		handle:function(){},
-		willHandle:function(){}
+		extensions:[".foo"],
+		handle:function(){}
 	};
 	
 	var rawConfig = {
 	    entry:"/path/to/src/js/main.js",
-	    handlers:extraHandler
+	    handlers:[extraHandler]
 	};
 	
 	var settings = getConfig(rawConfig);
@@ -73,10 +74,11 @@ test("getConfig 3",function(t){
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
-			handlers:[
-			          jsHandler,
-			          extraHandler
-			          ]
+			handlers:{
+				".js":jsHandler,
+				".foo":extraHandler
+			},
+			aliases:{}
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -86,24 +88,24 @@ test("getConfig 3",function(t){
 
 test("getConfig 4",function(t){
 	var foo = {
-		willHandle:function(){},
+		extensions:[".bar",".baz"],
 		handle:function(){}
 	};
 	
 	var bar = {
 		handle:function(){},
-		willHandle:function(){}
+		extensions:[".foo"]
 	};
 	
 	var baz = {
 		handle:function(){},
-		willHandle:function(){}
+		extensions:[".qwe"]
 	};
 	
 	var rawConfig = {
 	    entry:"/path/to/src/js/main.js",
 	    urlDest:"foo",
-	    handlers:[foo,bar,baz]
+	    handlers:[jsHandler,foo,bar,baz]
 	};
 	
 	var settings = getConfig(rawConfig);
@@ -117,12 +119,14 @@ test("getConfig 4",function(t){
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
-			handlers:[
-			          jsHandler,
-			          foo,
-			          bar,
-			          baz
-			          ]
+			handlers:{
+		    	".js":jsHandler,
+		    	".bar":foo,
+		    	".baz":foo,
+		    	".foo":bar,
+		    	".qwe":baz
+		    },
+		    aliases:{}
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -130,7 +134,73 @@ test("getConfig 4",function(t){
 	t.end();
 });
 
-test("getConfig 5",function(t) {
+test("getConfig 5",function(t){
+	var foo = {
+		extensions:[".bar",".baz"],
+		handle:function(){},
+		aliases:{
+			">>a":"/path/to/foo",
+			">>e":"/foo/nar/ser"
+		}
+	};
+	
+	var bar = {
+		handle:function(){},
+		extensions:[".foo"]
+	};
+	
+	var baz = {
+		handle:function(){},
+		extensions:[".qwe"],
+		aliases:{
+			">>d":"/bob/smith/hones",
+			">>b":"/joan/wilson/kate"
+		}
+	};
+	
+	var rawConfig = {
+		entry:"/path/to/src/js/main.js",
+		urlDest:"foo",
+		handlers:[jsHandler,foo,bar,baz],
+		aliases:{
+			">>mypersonalalias":"/so/many/paths",
+			">>d":"/overrides/d"
+		}
+	};
+	
+	var settings = getConfig(rawConfig);
+	
+	t.equivalent(
+		settings,
+		{
+			entry:path.resolve("/path/to/src/js/main.js"),
+			dest:path.resolve("/path/to/src/js/main.out.js"),
+			urlDest:"foo",
+			postProcess:"none",
+			defaultExtension:".js",
+			requireBase:"",
+			handlers:{
+				".js":jsHandler,
+				".bar":foo,
+				".baz":foo,
+				".foo":bar,
+				".qwe":baz
+				},
+			aliases:{
+				">>a":"/path/to/foo",
+				">>e":"/foo/nar/ser",
+				">>b":"/joan/wilson/kate",
+				">>d":"/overrides/d",
+				">>mypersonalalias":"/so/many/paths"
+			}
+		},
+		"Defaults should have been merged in properly."
+	);
+	
+	t.end();
+});
+
+test("getConfig 6",function(t) {
 	t.throws(function(){
 		getConfig({});
 	});
@@ -165,40 +235,10 @@ test("getConfig 5",function(t) {
 		});
 	});
 	
-	t.throws(function(){
-		getConfig({
-			entry:"path/to/src.js",
-			dest:"path/to/dest.js",
-			urlDest:"http://mysite.com/path/to/dest.js",
-			postProcess:"normal",
-			handlers:true
-		});
-	});
-	
-	t.throws(function(){
-		getConfig({
-			entry:"path/to/src.js",
-			dest:"path/to/dest.js",
-			urlDest:"http://mysite.com/path/to/dest.js",
-			postProcess:"normal",
-			handlers:34
-		});
-	});
-	
-	t.throws(function(){
-		getConfig({
-			entry:"path/to/src.js",
-			dest:"path/to/dest.js",
-			urlDest:"http://mysite.com/path/to/dest.js",
-			postProcess:"normal",
-			handlers:[6e3]
-		});
-	});
-	
 	t.end();
 });
 
-test("getConfig 6",function(t) {
+test("getConfig 7",function(t) {
 	var rawConfig = {
 	    entry:"/path/to/src/js/main.js",
 	    requireBase:"."
@@ -215,7 +255,8 @@ test("getConfig 6",function(t) {
 			postProcess:"none",
 			requireBase:process.cwd(),
 			defaultExtension:".js",
-			handlers:[jsHandler]
+			handlers:{".js":jsHandler},
+			aliases:{}
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -223,7 +264,7 @@ test("getConfig 6",function(t) {
 	t.end();
 });
 
-test("getConfig 7",function(t) {
+test("getConfig 8",function(t) {
 	var rawConfig = {
 	    entry:"/src/js/main.js",
 	    defaultExtension:".coffee"
@@ -240,7 +281,8 @@ test("getConfig 7",function(t) {
 			postProcess:"none",
 			requireBase:"",
 			defaultExtension:".coffee",
-			handlers:[jsHandler]
+			handlers:{".js":jsHandler},
+			aliases:{}
 		},
 		"Defaults should have been merged in properly."
 	);

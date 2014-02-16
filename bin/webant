@@ -10,7 +10,9 @@ var optimist = require("optimist")
         "Usage:\n" +
         "  webant --useConfig [options]\n" + 
         "  webant --useConfig [path to config file] [options]\n" +
-        "  webant --entry [path to entry script] [options]"
+        "  webant --entry [path to entry script] [options]\n\n" +
+        "Example:\n" +
+        "  webant --entry src/js/main.js --dest build/js/main.js"
     )
     .describe("entry","Path to entry script relative to current directory. [Required, unless --useConfig flag is set].")
     .describe("dest","Path to where compiled output will be written.")
