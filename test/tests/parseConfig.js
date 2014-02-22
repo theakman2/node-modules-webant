@@ -2,17 +2,17 @@ var test = require("tap").test;
 
 var path = require("path");
 
-var getConfig = require("../../lib/getConfig.js");
+var parseConfig = require("../../lib/parseConfig.js");
 
 var jsHandler = require("../../lib/jsHandler.js");
 
-test("getConfig 1",function(t){
+test("parseConfig 1",function(t){
 	var rawConfig = {
 	    entry:"/path/to/src/js/main.js",
 	    dest:"/path/to/build/main.js"
 	};
 	
-	var settings = getConfig(rawConfig);
+	var settings = parseConfig(rawConfig);
 	
 	t.equivalent(
 		rawConfig,
@@ -26,13 +26,13 @@ test("getConfig 1",function(t){
 	t.end();
 });
 
-test("getConfig 2",function(t){
+test("parseConfig 2",function(t){
 	var rawConfig = {
 	    entry:"/path/to/src/js/main.js",
 	    dest:"/path/to/build/main.out.js"
 	};
 	
-	var settings = getConfig(rawConfig);
+	var settings = parseConfig(rawConfig);
 	
 	t.equivalent(
 		settings,
@@ -43,7 +43,7 @@ test("getConfig 2",function(t){
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
-			handlers:{".js":jsHandler},
+			handlers:{".js":jsHandler.handle},
 			aliases:{}
 		},
 		"Defaults should have been merged in properly."
@@ -52,7 +52,7 @@ test("getConfig 2",function(t){
 	t.end();
 });
 
-test("getConfig 3",function(t){
+test("parseConfig 3",function(t){
 	var extraHandler = {
 		extensions:[".foo"],
 		handle:function(){}
@@ -63,7 +63,7 @@ test("getConfig 3",function(t){
 	    handlers:[extraHandler]
 	};
 	
-	var settings = getConfig(rawConfig);
+	var settings = parseConfig(rawConfig);
 	
 	t.equivalent(
 		settings,
@@ -75,8 +75,8 @@ test("getConfig 3",function(t){
 			defaultExtension:".js",
 			requireBase:"",
 			handlers:{
-				".js":jsHandler,
-				".foo":extraHandler
+				".js":jsHandler.handle,
+				".foo":extraHandler.handle
 			},
 			aliases:{}
 		},
@@ -86,7 +86,7 @@ test("getConfig 3",function(t){
 	t.end();
 });
 
-test("getConfig 4",function(t){
+test("parseConfig 4",function(t){
 	var foo = {
 		extensions:[".bar",".baz"],
 		handle:function(){}
@@ -108,7 +108,7 @@ test("getConfig 4",function(t){
 	    handlers:[jsHandler,foo,bar,baz]
 	};
 	
-	var settings = getConfig(rawConfig);
+	var settings = parseConfig(rawConfig);
 	
 	t.equivalent(
 		settings,
@@ -120,11 +120,11 @@ test("getConfig 4",function(t){
 			defaultExtension:".js",
 			requireBase:"",
 			handlers:{
-		    	".js":jsHandler,
-		    	".bar":foo,
-		    	".baz":foo,
-		    	".foo":bar,
-		    	".qwe":baz
+		    	".js":jsHandler.handle,
+		    	".bar":foo.handle,
+		    	".baz":foo.handle,
+		    	".foo":bar.handle,
+		    	".qwe":baz.handle
 		    },
 		    aliases:{}
 		},
@@ -134,7 +134,7 @@ test("getConfig 4",function(t){
 	t.end();
 });
 
-test("getConfig 5",function(t){
+test("parseConfig 5",function(t){
 	var foo = {
 		extensions:[".bar",".baz"],
 		handle:function(){},
@@ -168,7 +168,7 @@ test("getConfig 5",function(t){
 		}
 	};
 	
-	var settings = getConfig(rawConfig);
+	var settings = parseConfig(rawConfig);
 	
 	t.equivalent(
 		settings,
@@ -180,11 +180,11 @@ test("getConfig 5",function(t){
 			defaultExtension:".js",
 			requireBase:"",
 			handlers:{
-				".js":jsHandler,
-				".bar":foo,
-				".baz":foo,
-				".foo":bar,
-				".qwe":baz
+				".js":jsHandler.handle,
+				".bar":foo.handle,
+				".baz":foo.handle,
+				".foo":bar.handle,
+				".qwe":baz.handle
 				},
 			aliases:{
 				">>a":"/path/to/foo",
@@ -200,26 +200,26 @@ test("getConfig 5",function(t){
 	t.end();
 });
 
-test("getConfig 6",function(t) {
+test("parseConfig 6",function(t) {
 	t.throws(function(){
-		getConfig({});
+		parseConfig({});
 	});
 
 	t.throws(function(){
-		getConfig({
+		parseConfig({
 			entry:50
 		});
 	});
 	
 	t.throws(function(){
-		getConfig({
+		parseConfig({
 			entry:"path/to/src.js",
 			dest:true
 		});
 	});
 	
 	t.throws(function(){
-		getConfig({
+		parseConfig({
 			entry:"path/to/src.js",
 			dest:"path/to/dest.js",
 			urlDest:[]
@@ -227,7 +227,7 @@ test("getConfig 6",function(t) {
 	});
 	
 	t.throws(function(){
-		getConfig({
+		parseConfig({
 			entry:"path/to/src.js",
 			dest:"path/to/dest.js",
 			urlDest:"http://mysite.com/path/to/dest.js",
@@ -238,13 +238,13 @@ test("getConfig 6",function(t) {
 	t.end();
 });
 
-test("getConfig 7",function(t) {
+test("parseConfig 7",function(t) {
 	var rawConfig = {
 	    entry:"/path/to/src/js/main.js",
 	    requireBase:"."
 	};
 	
-	var settings = getConfig(rawConfig);
+	var settings = parseConfig(rawConfig);
 	
 	t.equivalent(
 		settings,
@@ -255,7 +255,7 @@ test("getConfig 7",function(t) {
 			postProcess:"none",
 			requireBase:process.cwd(),
 			defaultExtension:".js",
-			handlers:{".js":jsHandler},
+			handlers:{".js":jsHandler.handle},
 			aliases:{}
 		},
 		"Defaults should have been merged in properly."
@@ -264,13 +264,13 @@ test("getConfig 7",function(t) {
 	t.end();
 });
 
-test("getConfig 8",function(t) {
+test("parseConfig 8",function(t) {
 	var rawConfig = {
 	    entry:"/src/js/main.js",
 	    defaultExtension:".coffee"
 	};
 	
-	var settings = getConfig(rawConfig);
+	var settings = parseConfig(rawConfig);
 	
 	t.equivalent(
 		settings,
@@ -281,8 +281,69 @@ test("getConfig 8",function(t) {
 			postProcess:"none",
 			requireBase:"",
 			defaultExtension:".coffee",
-			handlers:{".js":jsHandler},
+			handlers:{".js":jsHandler.handle},
 			aliases:{}
+		},
+		"Defaults should have been merged in properly."
+	);
+	
+	t.end();
+});
+
+test("parseConfig 9",function(t){
+	var rawConfig = [
+	                 "--entry",
+	                 "/src/js/main.js",
+	                 "--defaultExtension=.coffee",
+	                 "--postProcess",
+	                 "debug"
+	                 ];
+	
+	var settings = parseConfig(rawConfig);
+	
+	t.equivalent(
+		settings,
+		{
+			entry:path.resolve("/src/js/main.js"),
+			dest:path.resolve("/src/js/main.out.js"),
+			urlDest:"main.out.js",
+			postProcess:"debug",
+			requireBase:"",
+			defaultExtension:".coffee",
+			handlers:{".js":jsHandler.handle},
+			aliases:{}
+		},
+		"Defaults should have been merged in properly."
+	);
+	
+	t.end();
+});
+
+test("parseConfig 10",function(t){
+	var configFile = path.join(__dirname,"nested","webantconfig.json");
+	
+	var rawConfig = [
+	                 "--r",
+	                 "",
+	                 "--useConfig",
+	                 configFile,
+	                 "--p=compress",
+	                 ];
+	
+	var settings = parseConfig(rawConfig);
+	
+	t.equivalent(
+		settings,
+		{
+			entry:path.join(__dirname,"nested","foo","bar","baz.js"),
+			dest:path.join(__dirname,"nested","foo","baz","out.js"),
+			urlDest:"out.js",
+			postProcess:"compress",
+			requireBase:"",
+			defaultExtension:".ts",
+			handlers:{".js":jsHandler.handle},
+			aliases:{},
+			useConfig:configFile
 		},
 		"Defaults should have been merged in properly."
 	);

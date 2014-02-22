@@ -1,0 +1,7 @@
+{
+	"entry":"foo/bar/baz.js",
+	"dest":"foo/baz/out.js",
+	"requireBase":"foo/bar",
+	"postProcess":"debug",
+	"defaultExtension":".ts"
+}

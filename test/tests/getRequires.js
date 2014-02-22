@@ -1,9 +1,9 @@
 var test = require("tap").test;
 var uglify = require("uglify-js");
 
-var requireWalk = require("../../lib/util/requireWalk.js");
+var getRequires = require("../../lib/util/getRequires.js");
 
-test("requireWalk 1",function(t){
+test("getRequires 1",function(t){
 	var contents = [
 	                "require()",
 	                "require('foo'+'.js')",
@@ -34,14 +34,14 @@ test("requireWalk 1",function(t){
 	
 	contents.forEach(function(c){
 		t.throws(function(){
-			requireWalk(uglify.parse(c),function(){});
+			getRequires(uglify.parse(c));
 		});
 	});
 	
 	t.end();
 });
 
-test("requireWalk 2",function(t){
+test("getRequires 2",function(t){
 	var ast = uglify.parse(
 		"require('a');" +
 		"require('b',function(){});" +
@@ -51,13 +51,11 @@ test("requireWalk 2",function(t){
 		"require(['g','h'],function(){});"
 	);
 	
-	var requires = [];
-	
-	requireWalk(ast,function(node,idx,type){
-		requires.push({
-			v:node[idx].value,
-			t:type
-		});
+	var requires = getRequires(ast).map(function(r){
+		return {
+			v:r.value,
+			t:r.type
+		};
 	});
 	
 	t.equivalent(

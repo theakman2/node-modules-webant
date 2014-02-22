@@ -2,103 +2,33 @@
 
 var path = require("path");
 
-var version = require(__dirname+"/../package.json").version;
+var yargs = require("../lib/util/yargs.js");
 
-var optimist = require("optimist")
-    .usage(
-        "Webant: the intelligent javascript web bundler (v" + version + ") - (c) 2013 A Kazim\n\n" +
-        "Usage:\n" +
-        "  webant --useConfig [options]\n" + 
-        "  webant --useConfig [path to config file] [options]\n" +
-        "  webant --entry [path to entry script] [options]\n\n" +
-        "Example:\n" +
-        "  webant --entry src/js/main.js --dest build/js/main.js"
-    )
-    .describe("entry","Path to entry script relative to current directory. [Required, unless --useConfig flag is set].")
-    .describe("dest","Path to where compiled output will be written.")
-    .describe("urlDest","URL at which the path specified for '--dest' can be reached.")
-    .describe("postProcess","Post-processing to apply to compiled javascript. Can be either 'compress' (compresses output), 'debug' (adds file and line numbers to output) or 'none' (no post-processing).")
-    .describe("requireBase","Resolve require paths relative to the supplied directory instead of relative to the file containing the require.")
-    .describe("defaultExtension","Default extension to append to a require path when no extension is provided. Include the starting period (i.e. '.js').")
-    .describe("handlers","Additional handlers to use. Can be set multiple times. Example: -H coffee -H scss -H json")
-    .describe("useConfig","Path to a JSON configuration file which sets default options. If this option is set but no path is provided, the path is assumed to be './webant-config.json'. [Required, unless --entry option is provided]. [Additional options override those found in the configuration file].")
-    .describe("version","Show version.")
-    .describe("help","Show help.")
-    .alias("entry","e")
-    .alias("dest","d")
-    .alias("urlDest","u")
-    .alias("postProcess","p")
-    .alias("requireBase","r")
-    .alias("defaultExtension","D")
-    .alias("handlers","H")
-    .alias("useConfig","c")
-    .alias("version","v")
-    .alias("help","h")
-    .string("entry")
-    .string("dest")
-    .string("urlDest")
-    .string("postProcess")
-    .string("useConfig")
-    .boolean("version")
-    .boolean("help")
-    .wrap(80);
-    
-var args = optimist.argv;
+var args = yargs.argv;
 
 if (args.help) {
-    optimist.showHelp();
-    process.exit();
+	yargs.showHelp();
+	process.exit();
 }
 
 if (args.version) {
-    console.log(version);
-    process.exit();
+	console.log(require(__dirname+"/../package.json").version);
+	process.exit();
 }
 
 if (!args.entry && !args.useConfig) {
-    optimist.showHelp();
-    process.exit(1);
+	yargs.showHelp();
+	process.exit(1);
 }
 
 var webant = require("../lib/webant");
-var extend = require("extend");
-
-var config = {
-    entry:args.entry,
-    dest:args.dest,
-    urlDest:args.urlDest,
-    postProcess:args.postProcess,
-    requireBase:args.requireBase,
-    defaultExtension:args.defaultExtension,
-    handlers:Array.isArray(args.handlers) ? args.handlers : [args.handlers]
-};
-
-if (typeof args.useConfig !== "undefined") {
-    if (typeof args.useConfig === "string") {
-        var configPath = path.resolve(args.useConfig);
-    } else {
-        var configPath = path.resolve("./webant-config.json");
-    }
-    var dir = path.dirname(configPath);
-    if (dir !== ".") {
-        try {
-            process.chdir(dir);
-        } catch(err) {
-            console.error("'useConfig' must be the filename of a configuration file in the " +
-                "current working directory. Using a configuration file from another directory is " +
-                "not supported.");
-            process.exit(1);
-        }
-    }
-    config = extend(true,{},require(configPath),config);
-}
 
 console.log("Compilation beginning");
-webant(config,function(err,data){
-    if (err) {
-        console.error("Compilation unsuccessful");
-        throw err;
-        return;
-    }
-    console.log("Compilation successful ["+data.numModules+" modules over "+data.numFiles+" files]");
+webant(process.argv.slice(2),function(err){
+	if (err) {
+		console.error("Compilation unsuccessful");
+		throw err;
+		return;
+	}
+	console.log("Compilation successful");
 });

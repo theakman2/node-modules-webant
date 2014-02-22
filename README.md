@@ -136,7 +136,7 @@ Options:
 
 ### Configuration file settings
 
-If you pass the `--useConfig` option via the CLI, webant will assume the configuration file is a JSON file which looks like this:
+If you pass the `--useConfig` option via the CLI, webant will assume the configuration file is a JSON file which looks something like this:
 
 ```json
 {
