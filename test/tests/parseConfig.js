@@ -350,3 +350,26 @@ test("parseConfig 10",function(t){
 	
 	t.end();
 });
+
+test("parseConfig 11",function(t){
+	var rawConfig = "/path/to/src/js/main.js";
+	
+	var settings = parseConfig(rawConfig);
+	
+	t.equivalent(
+		settings,
+		{
+			entry:path.resolve("/path/to/src/js/main.js"),
+			dest:path.resolve("/path/to/src/js/main.out.js"),
+			urlDest:"main.out.js",
+			postProcess:"none",
+			defaultExtension:".js",
+			requireBase:"",
+			handlers:{".js":jsHandler.handle},
+			aliases:{}
+		},
+		"Defaults should have been merged in properly."
+	);
+	
+	t.end();
+});
