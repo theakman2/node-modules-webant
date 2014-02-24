@@ -34,6 +34,8 @@ test("parseConfig 2",function(t){
 	
 	var settings = parseConfig(rawConfig);
 	
+	delete settings.handlers;
+	
 	t.equivalent(
 		settings,
 		{
@@ -43,7 +45,6 @@ test("parseConfig 2",function(t){
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
-			handlers:{".js":jsHandler.handle},
 			aliases:{}
 		},
 		"Defaults should have been merged in properly."
@@ -55,7 +56,9 @@ test("parseConfig 2",function(t){
 test("parseConfig 3",function(t){
 	var extraHandler = {
 		extensions:[".foo"],
-		handle:function(){}
+		handle:function(){
+			return this.extensions[0];
+		}
 	};
 	
 	var rawConfig = {
@@ -64,6 +67,8 @@ test("parseConfig 3",function(t){
 	};
 	
 	var settings = parseConfig(rawConfig);
+	var h = settings.handlers;
+	delete settings.handlers;
 	
 	t.equivalent(
 		settings,
@@ -74,13 +79,15 @@ test("parseConfig 3",function(t){
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
-			handlers:{
-				".js":jsHandler.handle,
-				".foo":extraHandler.handle
-			},
 			aliases:{}
 		},
 		"Defaults should have been merged in properly."
+	);
+	
+	t.strictEqual(
+		h[".foo"](),
+		".foo",
+		"Handlers should have been merged in correctly."
 	);
 	
 	t.end();
@@ -89,7 +96,9 @@ test("parseConfig 3",function(t){
 test("parseConfig 4",function(t){
 	var foo = {
 		extensions:[".bar",".baz"],
-		handle:function(){}
+		handle:function(){
+			return this.extensions[1];
+		}
 	};
 	
 	var bar = {
@@ -97,10 +106,14 @@ test("parseConfig 4",function(t){
 		extensions:[".foo"]
 	};
 	
-	function baz() {}
+	function baz() {
+		this._test = "testing";
+	}
 	
 	baz.prototype = {
-		handle:function(){},
+		handle:function(){
+			return this._test;
+		},
 		extensions:[".qwe"]
 	};
 	
@@ -112,6 +125,10 @@ test("parseConfig 4",function(t){
 	
 	var settings = parseConfig(rawConfig);
 	
+	var h = settings.handlers;
+	
+	delete settings.handlers;
+	
 	t.equivalent(
 		settings,
 		{
@@ -121,16 +138,27 @@ test("parseConfig 4",function(t){
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
-			handlers:{
-		    	".js":jsHandler.handle,
-		    	".bar":foo.handle,
-		    	".baz":foo.handle,
-		    	".foo":bar.handle,
-		    	".qwe":baz.prototype.handle
-		    },
 		    aliases:{}
 		},
 		"Defaults should have been merged in properly."
+	);
+
+	t.equivalent(
+		Object.keys(h).sort(),
+		[".bar",".baz",".foo",".js",".qwe"],
+		"Handlers should have been merged in correctly."
+	);
+	
+	t.strictEqual(
+		h[".bar"](),
+		".baz",
+		"Handler's 'handle' method should have been bound correctly - .bar."
+	);
+	
+	t.strictEqual(
+		h[".qwe"](),
+		"testing",
+		"Handler's 'handle' method should have been bound correctly - .qwe."
 	);
 	
 	t.end();
@@ -171,6 +199,9 @@ test("parseConfig 5",function(t){
 	};
 	
 	var settings = parseConfig(rawConfig);
+	var h = settings.handlers;
+	
+	delete settings.handlers;
 	
 	t.equivalent(
 		settings,
@@ -181,13 +212,6 @@ test("parseConfig 5",function(t){
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
-			handlers:{
-				".js":jsHandler.handle,
-				".bar":foo.handle,
-				".baz":foo.handle,
-				".foo":bar.handle,
-				".qwe":baz.handle
-				},
 			aliases:{
 				">>a":"/path/to/foo",
 				">>e":"/foo/nar/ser",
@@ -197,6 +221,12 @@ test("parseConfig 5",function(t){
 			}
 		},
 		"Defaults should have been merged in properly."
+	);
+	
+	t.equivalent(
+		Object.keys(h).sort(),
+		[".bar",".baz",".foo",".js",".qwe"],
+		"Handlers should have been merged in correctly."
 	);
 	
 	t.end();
@@ -247,7 +277,7 @@ test("parseConfig 7",function(t) {
 	};
 	
 	var settings = parseConfig(rawConfig);
-	
+	delete settings.handlers;
 	t.equivalent(
 		settings,
 		{
@@ -257,7 +287,6 @@ test("parseConfig 7",function(t) {
 			postProcess:"none",
 			requireBase:process.cwd(),
 			defaultExtension:".js",
-			handlers:{".js":jsHandler.handle},
 			aliases:{}
 		},
 		"Defaults should have been merged in properly."
@@ -273,7 +302,7 @@ test("parseConfig 8",function(t) {
 	};
 	
 	var settings = parseConfig(rawConfig);
-	
+	delete settings.handlers;
 	t.equivalent(
 		settings,
 		{
@@ -283,7 +312,6 @@ test("parseConfig 8",function(t) {
 			postProcess:"none",
 			requireBase:"",
 			defaultExtension:".coffee",
-			handlers:{".js":jsHandler.handle},
 			aliases:{}
 		},
 		"Defaults should have been merged in properly."
@@ -302,6 +330,7 @@ test("parseConfig 9",function(t){
 	                 ];
 	
 	var settings = parseConfig(rawConfig);
+	delete settings.handlers;
 	
 	t.equivalent(
 		settings,
@@ -312,7 +341,6 @@ test("parseConfig 9",function(t){
 			postProcess:"debug",
 			requireBase:"",
 			defaultExtension:".coffee",
-			handlers:{".js":jsHandler.handle},
 			aliases:{}
 		},
 		"Defaults should have been merged in properly."
@@ -333,7 +361,7 @@ test("parseConfig 10",function(t){
 	                 ];
 	
 	var settings = parseConfig(rawConfig);
-	
+	delete settings.handlers;
 	t.equivalent(
 		settings,
 		{
@@ -343,7 +371,6 @@ test("parseConfig 10",function(t){
 			postProcess:"compress",
 			requireBase:"",
 			defaultExtension:".ts",
-			handlers:{".js":jsHandler.handle},
 			aliases:{},
 			useConfig:configFile
 		},
@@ -357,7 +384,7 @@ test("parseConfig 11",function(t){
 	var rawConfig = "/path/to/src/js/main.js";
 	
 	var settings = parseConfig(rawConfig);
-	
+	delete settings.handlers;
 	t.equivalent(
 		settings,
 		{
@@ -367,7 +394,6 @@ test("parseConfig 11",function(t){
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
-			handlers:{".js":jsHandler.handle},
 			aliases:{}
 		},
 		"Defaults should have been merged in properly."
