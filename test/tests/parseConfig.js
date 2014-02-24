@@ -4,7 +4,7 @@ var path = require("path");
 
 var parseConfig = require("../../lib/parseConfig.js");
 
-var jsHandler = require("../../lib/jsHandler.js");
+var jsHandler = require("../../lib/util/jsHandler.js");
 
 test("parseConfig 1",function(t){
 	var rawConfig = {
@@ -97,7 +97,9 @@ test("parseConfig 4",function(t){
 		extensions:[".foo"]
 	};
 	
-	var baz = {
+	function baz() {}
+	
+	baz.prototype = {
 		handle:function(){},
 		extensions:[".qwe"]
 	};
@@ -124,7 +126,7 @@ test("parseConfig 4",function(t){
 		    	".bar":foo.handle,
 		    	".baz":foo.handle,
 		    	".foo":bar.handle,
-		    	".qwe":baz.handle
+		    	".qwe":baz.prototype.handle
 		    },
 		    aliases:{}
 		},
