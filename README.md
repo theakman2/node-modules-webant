@@ -288,7 +288,7 @@ When you `require` a module asynchronously, webant intelligently tries to includ
 
 ### Well tested
 
-Webant is thoroughly tested with 150+ unit tests, most of which use a headless browser ([PhantomJS](http://phantomjs.org)) to ensure the module works in a browser environment as intended.
+Webant is thoroughly tested with 170+ unit tests, most of which use a headless browser ([PhantomJS](http://phantomjs.org)) to ensure the module works in a browser environment as intended.
 
 ## Dynamic requires
 
