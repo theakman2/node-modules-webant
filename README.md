@@ -124,6 +124,12 @@ Options:
                           (i.e. '.js').
   --handlers, -H          Additional handlers to use. Can be set multiple
                           times. Example: -H coffee -H scss -H json
+  --includeBootstrap, -i  Should the bootstrap code that calls the entry module
+                          be included? Pass '--no-includeBootstrap' or
+                          '--includeBootstrap=0' to exclude the bootstrap code.
+                                                                 [default: true]
+  --browserGlobalVar, -b  Name of the global variable used in the compiled
+                          javascript.
   --useConfig, -c         Path to a JSON configuration file which sets default
                           options. If this option is set but no path is
                           provided, the path is assumed to be
@@ -288,7 +294,7 @@ When you `require` a module asynchronously, webant intelligently tries to includ
 
 ### Well tested
 
-Webant is thoroughly tested with 180+ unit tests, most of which use a headless browser ([PhantomJS](http://phantomjs.org)) to ensure the module works in a browser environment as intended.
+Webant is thoroughly tested with 200+ unit tests, most of which use a headless browser ([PhantomJS](http://phantomjs.org)) to ensure the module works in a browser environment as intended.
 
 ## Dynamic requires
 

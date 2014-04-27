@@ -45,7 +45,9 @@ test("parseConfig 2",function(t){
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
-			aliases:{}
+			aliases:{},
+			includeBootstrap:true,
+			browserGlobalVar:"__CHUNKS__"
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -79,7 +81,9 @@ test("parseConfig 3",function(t){
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
-			aliases:{}
+			aliases:{},
+			includeBootstrap:true,
+			browserGlobalVar:"__CHUNKS__"
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -138,7 +142,9 @@ test("parseConfig 4",function(t){
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
-		    aliases:{}
+		    aliases:{},
+			includeBootstrap:true,
+			browserGlobalVar:"__CHUNKS__"
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -218,7 +224,9 @@ test("parseConfig 5",function(t){
 				">>b":"/joan/wilson/kate",
 				">>d":"/overrides/d",
 				">>mypersonalalias":"/so/many/paths"
-			}
+			},
+			includeBootstrap:true,
+			browserGlobalVar:"__CHUNKS__"
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -287,7 +295,9 @@ test("parseConfig 7",function(t) {
 			postProcess:"none",
 			requireBase:process.cwd(),
 			defaultExtension:".js",
-			aliases:{}
+			aliases:{},
+			includeBootstrap:true,
+			browserGlobalVar:"__CHUNKS__"
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -312,7 +322,9 @@ test("parseConfig 8",function(t) {
 			postProcess:"none",
 			requireBase:"",
 			defaultExtension:".coffee",
-			aliases:{}
+			aliases:{},
+			includeBootstrap:true,
+			browserGlobalVar:"__CHUNKS__"
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -326,7 +338,8 @@ test("parseConfig 9",function(t){
 	                 "/src/js/main.js",
 	                 "--defaultExtension=.coffee",
 	                 "--postProcess",
-	                 "debug"
+	                 "debug",
+	                 "--no-includeBootstrap"
 	                 ];
 	
 	var settings = parseConfig(rawConfig);
@@ -341,7 +354,9 @@ test("parseConfig 9",function(t){
 			postProcess:"debug",
 			requireBase:"",
 			defaultExtension:".coffee",
-			aliases:{}
+			aliases:{},
+			includeBootstrap:false,
+			browserGlobalVar:"__CHUNKS__"
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -372,7 +387,9 @@ test("parseConfig 10",function(t){
 			requireBase:"",
 			defaultExtension:".ts",
 			aliases:{},
-			useConfig:configFile
+			useConfig:configFile,
+			includeBootstrap:true,
+			browserGlobalVar:"__CHUNKS__"
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -394,7 +411,38 @@ test("parseConfig 11",function(t){
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
-			aliases:{}
+			aliases:{},
+			includeBootstrap:true,
+			browserGlobalVar:"__CHUNKS__"
+		},
+		"Defaults should have been merged in properly."
+	);
+	
+	t.end();
+});
+
+test("parseConfig 12",function(t) {
+	var rawConfig = {
+	    entry:"/src/js/main.js",
+	    defaultExtension:".coffee",
+	    includeBootstrap:false,
+	    browserGlobalVar:"foo"
+	};
+	
+	var settings = parseConfig(rawConfig);
+	delete settings.handlers;
+	t.equivalent(
+		settings,
+		{
+			entry:path.resolve("/src/js/main.js"),
+			dest:path.resolve("/src/js/main.out.js"),
+			urlDest:"main.out.js",
+			postProcess:"none",
+			requireBase:"",
+			defaultExtension:".coffee",
+			aliases:{},
+			includeBootstrap:false,
+			browserGlobalVar:"foo"
 		},
 		"Defaults should have been merged in properly."
 	);

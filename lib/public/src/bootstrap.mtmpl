@@ -1,20 +1,18 @@
-(function(entryChunk){
-	var chunks = {
-		$$$ENTRY_CHUNK$$$:entryChunk
-	};
+(function(){
+	<% if (data.isMultiChunk) { %>
 	var onloadCallbacks = [];
 	var loadStatus = {};
 	function load(cId) {
-	    var s = document.createElement('script');
-	    s.type = 'text/javascript';
-	    s.async = true;
-	    s.src = $$$SRC_BEFORE$$$ + cId + $$$SRC_AFTER$$$;
-	    s.onload = s.onreadystatechange = function(){
+		var s = document.createElement("script");
+		s.type = "text/javascript";
+		s.async = true;
+		s.src = <%=data.srcBefore%> + cId + <%=data.srcAfter%>;
+		s.onload = s.onreadystatechange = function(){
 			if (!s.readyState || /loaded|complete/.test(s.readyState)) {
 				s.onload = s.onreadystatechange = null;
 				if (loadStatus.hasOwnProperty(cId) && (loadStatus[cId] === 2)) {
-		    		return;
-		    	}
+					return;
+				}
 				loadStatus[cId] = 2;
 				var j = onloadCallbacks.length;
 				while(j--) {
@@ -25,10 +23,10 @@
 						fn.apply(undefined,getExports(typeof data[0] === "string" ? [data] : data));
 					}
 				}
-			}	    	
-	    };
-	    var el = document.getElementsByTagName('head')[0] || document.documentElement;
-	    el.insertBefore(s,el.firstChild);
+			}			
+		};
+		var el = document.getElementsByTagName("head")[0] || document.documentElement;
+		el.insertBefore(s,el.firstChild);
 	};
 	function require(data,cb) {
 		if (typeof cb !== "function") {
@@ -48,10 +46,24 @@
 			}
 		}
 	};
+	function getMissingChunkIds(data) {
+		if (typeof data[0] === "string") {
+			data = [data];
+		}
+		var missing = [];
+		var i = data.length;
+		while(i--) {
+			if (!window[<%=data.chunkGlobalVar%>].hasOwnProperty(data[i][0])) {
+				missing.push(data[i][0]);
+			}
+		}
+		return missing;
+	};
+	<% } %>
 	function getExports(data) {
 		if (typeof data[0] === "string") {
 			try {
-				var fn = chunks[data[0]][data[1]];
+				var fn = window[<%=data.chunkGlobalVar%>][data[0]][data[1]];
 			} catch(e) {
 				throw new Error("Module " + data + "not found."); 
 			}
@@ -61,7 +73,16 @@
 			var module;
 			var exports = {};
 			fn.__module = module = { exports: exports };
-			fn.call(undefined,require,module,exports);
+			fn.call(
+				undefined,
+				<% if (data.isMultiChunk) { %>
+					require
+				<% } else { %>
+					getExports
+				<% } %>,
+				module,
+				exports
+			);
 			return module.exports;
 		}
 		var ret = [];
@@ -70,19 +91,6 @@
 		}
 		return ret;
 	};
-	function getMissingChunkIds(data) {
-		if (typeof data[0] === "string") {
-			data = [data];
-		}
-		var missing = [];
-		var i = data.length;
-		while(i--) {
-			if (!chunks.hasOwnProperty(data[i][0])) {
-				missing.push(data[i][0]);
-			}
-		}
-		return missing;
-	};
-	window.__CHUNKS__ = chunks;
-	getExports([$$$ENTRY_CHUNK$$$,$$$ENTRY_MODULE$$$]);
-})($$$ENTRY_CHUNK_MODULES$$$);
+	window[<%=data.chunkGlobalVar%>] = window[<%=data.chunkGlobalVar%>] || {};
+	getExports([<%=data.entryChunk%>,<%=data.entryModule%>]);
+})();
