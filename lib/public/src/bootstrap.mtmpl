@@ -2,18 +2,18 @@
 	<% if (data.isMultiChunk) { %>
 	var onloadCallbacks = [];
 	var loadStatus = {};
-	function load(cId) {
+	function load(url) {
 		var s = document.createElement("script");
 		s.type = "text/javascript";
 		s.async = true;
-		s.src = <%=data.srcBefore%> + cId + <%=data.srcAfter%>;
+		s.src = url;
 		s.onload = s.onreadystatechange = function(){
 			if (!s.readyState || /loaded|complete/.test(s.readyState)) {
 				s.onload = s.onreadystatechange = null;
-				if (loadStatus.hasOwnProperty(cId) && (loadStatus[cId] === 2)) {
+				if (loadStatus.hasOwnProperty(url) && (loadStatus[url] === 2)) {
 					return;
 				}
-				loadStatus[cId] = 2;
+				loadStatus[url] = 2;
 				var j = onloadCallbacks.length;
 				while(j--) {
 					if (!getMissingChunkIds(onloadCallbacks[j][0]).length) {

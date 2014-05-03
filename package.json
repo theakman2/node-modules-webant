@@ -1,6 +1,6 @@
 {
 	"name": "webant",
-	"version": "4.4.0",
+	"version": "5.0.0-beta1",
 	"description": "Bringing CommonJS-style requires to the browser and more.",
 	"keywords": ["ant", "browser", "browserify", "build", "builder", "bundle", "bundler", "cjs", "commonjs", "deploy", "generator", "make", "modules", "package", "packager", "require", "requirejs", "web", "webant", "webmake"],
 	"author": "A Kazim",

@@ -27,9 +27,15 @@ function doTest(opts,cb) {
 				t.end();
 				return;
 			}
-			webant(opts.webantOpts,function(err2){
+			webant(opts.webantOpts,function(err2,out){
 				if (err2) {
 					t.fail("Error encountered while compiling webant test " + testName + ": " + err2);
+					t.end();
+					return;
+				}
+				
+				if (out.length !== opts.numChunksExpected) {
+					t.fail("Webant output does not match expected chunk count for webant test " + testName);
 					t.end();
 					return;
 				}
