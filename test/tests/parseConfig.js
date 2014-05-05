@@ -1,10 +1,15 @@
-var test = require("tap").test;
-
 var path = require("path");
 
-var parseConfig = require("../../lib/parseConfig.js");
+var test = require("tap").test;
+
+var Webant = require("../../lib/Webant.js");
+var ConfigParser = require("../../lib/ConfigParser.js");
 
 var jsHandler = require("../../lib/util/jsHandler.js");
+
+function parseConfig(config) {
+	return (new ConfigParser(new Webant(config))).parse();
+}
 
 test("parseConfig 1",function(t){
 	var rawConfig = {

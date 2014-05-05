@@ -7,7 +7,7 @@ var extend = require("extend");
 var shellEscape = require("shell-escape");
 var test = require("tap").test;
 
-var webant = require("../../lib/webant.js");
+var Webant = require("../../lib/Webant.js");
 
 var baseDir = path.join(__dirname,"..","webant");
 var phantomScript = path.join(baseDir,"phantomwebant.js");
@@ -27,7 +27,7 @@ function doTest(opts,cb) {
 				t.end();
 				return;
 			}
-			webant(opts.webantOpts,function(err2,out){
+			(new Webant(opts.webantOpts)).build(function(err2,out){
 				if (err2) {
 					t.fail("Error encountered while compiling webant test " + testName + ": " + err2);
 					t.end();

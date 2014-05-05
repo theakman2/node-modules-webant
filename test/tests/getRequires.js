@@ -1,7 +1,7 @@
 var test = require("tap").test;
 var uglify = require("uglify-js");
 
-var getRequires = require("../../lib/util/getRequires.js");
+var getRequires = require("../../lib/RequireTreeParser.js").prototype.getRequires;
 
 test("getRequires 1",function(t){
 	var contents = [
