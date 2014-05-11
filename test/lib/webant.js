@@ -18,7 +18,7 @@ function doTest(opts,cb) {
 	fs.remove(opts.destDir,function(err){
 		if (err) {
 			t.fail("Build directory not cleared for webant test " + testName);
-            t.end();
+			t.end();
 			return;
 		}
 		fs.exists(opts.destDir,function(exists){
@@ -34,7 +34,20 @@ function doTest(opts,cb) {
 					return;
 				}
 				
-				if (out.length !== opts.numChunksExpected) {
+				if (typeof opts.chunksExpected === "number") {
+					var expectedFiles = ["main.js"];
+					
+					for (var i = 1; i < opts.chunksExpected; i++) {
+						expectedFiles.push("main"+i+".js");
+					}
+					expectedFiles.sort();
+					var numChunksExpected = opts.chunksExpected;
+				} else {
+					var expectedFiles = opts.chunksExpected;
+					var numChunksExpected = opts.chunksExpected.length;
+				}
+				
+				if (out.length !== numChunksExpected) {
 					t.fail("Webant output does not match expected chunk count for webant test " + testName);
 					t.end();
 					return;
@@ -54,20 +67,12 @@ function doTest(opts,cb) {
 					}
 					
 					files.sort();
-
-                    var expectedFiles = ["main.js"];
-                    
-                    for (var i = 1; i < opts.numChunksExpected; i++) {
-                        expectedFiles.push("main"+i+".js");
-                    }
-                    
-                    expectedFiles.sort();
-                    
-                    t.equivalent(
-                        files,
-                        expectedFiles,
-                        "File count should match expected chunk count for webant test " + testName
-                    );
+					
+					t.equivalent(
+						files,
+						expectedFiles,
+						"Files should match expected files for webant test " + testName
+					);
 					
 					var pjs = childProcess.exec(
 						'phantomjs ' + shellEscape([phantomScript]),
@@ -104,7 +109,7 @@ function doTest(opts,cb) {
 	});
 }
 
-function go(testId,numChunksExpected,additionalOpts,onTest) {
+function go(testId,chunksExpected,additionalOpts,onTest) {
 	testId = testId.toString();
 	additionalOpts = additionalOpts || {};
 	
@@ -150,7 +155,7 @@ function go(testId,numChunksExpected,additionalOpts,onTest) {
 				testVariation:variations.indexOf(variation),
 				srcDir:srcDir,
 				destDir:destDir,
-				numChunksExpected:numChunksExpected,
+				chunksExpected:chunksExpected,
 				webantOpts:variation,
 				t:t,
 				onTest:onTest

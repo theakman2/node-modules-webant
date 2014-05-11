@@ -1,6 +1,6 @@
 {
 	"name": "webant",
-	"version": "5.0.0-beta3",
+	"version": "5.0.0-beta6",
 	"description": "Bringing CommonJS-style requires to the browser and more.",
 	"keywords": ["ant", "browser", "browserify", "build", "builder", "bundle", "bundler", "cjs", "commonjs", "deploy", "generator", "make", "modules", "package", "packager", "require", "requirejs", "web", "webant", "webmake"],
 	"author": "A Kazim",
@@ -17,8 +17,7 @@
 		"shell-escape": "~0.0.1",
 		"tap": "~0.4.8",
 		"mtmpl": "~0.2.0",
-		"webant-handler-text": "~2.0.0",
-		"webant-handler-dustjs": "~3.0.0"
+		"webant-handler-text": "~2.0.0"
 	},
 	"repository": "git://github.com/theakman2/node-modules-webant.git",
 	"bin": "./bin/webant",

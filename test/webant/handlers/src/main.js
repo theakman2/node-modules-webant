@@ -1,6 +1,6 @@
 var g = {};
 
-g.a = require("./a.dust")({name:"Bob"});
-g.b = require("./b.txt");
+g.a = require("./{baz}.rand");
+g.b = require("./{webantVar}");
 
 window.__global = g;

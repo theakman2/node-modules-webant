@@ -53,7 +53,7 @@
 		var missing = [];
 		var i = data.length;
 		while(i--) {
-			if (!window[<%=data.chunkGlobalVar%>].hasOwnProperty(data[i][0])) {
+			if (!window[<%=data.chunkGlobalVar%>].modules.hasOwnProperty(data[i][0])) {
 				missing.push(data[i][0]);
 			}
 		}
@@ -63,7 +63,7 @@
 	function getExports(data) {
 		if (typeof data[0] === "string") {
 			try {
-				var fn = window[<%=data.chunkGlobalVar%>][data[0]][data[1]];
+				var fn = window[<%=data.chunkGlobalVar%>].modules[data[0]][data[1]];
 			} catch(e) {
 				throw new Error("Module " + data + "not found."); 
 			}
@@ -92,5 +92,9 @@
 		return ret;
 	};
 	window[<%=data.chunkGlobalVar%>] = window[<%=data.chunkGlobalVar%>] || {};
-	getExports([<%=data.entryChunk%>,<%=data.entryModule%>]);
+	window[<%=data.chunkGlobalVar%>].modules = window[<%=data.chunkGlobalVar%>].modules || {};
+	window[<%=data.chunkGlobalVar%>].getExports = getExports;
+	<% if (data.entryModules.length) data.entryModules.forEach(function(el) { %>
+		getExports([<%=el.chunk%>,<%=el.module%>]);
+	<% }); %>
 })();

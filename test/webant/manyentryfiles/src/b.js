@@ -1,0 +1,1 @@
+window.__global += 4;
