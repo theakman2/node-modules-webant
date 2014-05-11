@@ -111,7 +111,8 @@ Options:
                           [Required, unless --useConfig flag is set].
   --dest, -d              Path to where compiled output will be written.
   --urlDest, -u           URL at which the path specified for '--dest' can be
-                          reached.
+                          reached. Can be absolute or relative. Example:
+                          --urlDest js/main.js
   --postProcess, -p       Post-processing to apply to compiled javascript. Can
                           be either 'compress' (compresses output), 'debug'
                           (adds file and line numbers to output) or 'none' (no
@@ -121,15 +122,32 @@ Options:
                           the require.
   --defaultExtension, -D  Default extension to append to a require path when no
                           extension is provided. Include the starting period
-                          (i.e. '.js').
+                          (e.g. '.ts'). Example: setting `--defaultExtension
+                          .coffee` would mean that `require('./path/to/file')`
+                          would look for `./path/to/file.coffee`. Defaults to
+                          '.js'.
   --handlers, -H          Additional handlers to use. Can be set multiple
                           times. Example: -H coffee -H scss -H json
-  --includeBootstrap, -i  Should the bootstrap code that calls the entry module
-                          be included? Pass '--no-includeBootstrap' or
-                          '--includeBootstrap=0' to exclude the bootstrap code.
-                                                                 [default: true]
+  --includeBootstrap, -i  The path to the file where the bootstrap code will be
+                          included. This should be set to one of the source
+                          files to be compiled. Webant will then insert the
+                          bootstrap code into the compiled version of the
+                          specified source file. Alternatively set this to the
+                          empty string for no bootstrap code to be included.
+                          Leave undefined for the bootstrap code to be included
+                          in the entry file specified via the `--entry` key.
   --browserGlobalVar, -b  Name of the global variable used in the compiled
-                          javascript.
+                          javascript. Defaults to '__MODULES__'.
+  --aliases               Parameters that can be used as part of `require`
+                          calls. Example: passing `--aliases.foo=jquery
+                          --aliases.baz=lib` would mean you could do
+                          `require('../{baz}/{foo}.js')` in your scripts.
+  --entryModules, -E      Path to entry modules. These are the modules that are
+                          automatically loaded when the compiled javascript is
+                          included in a webpage. This can be set multiple
+                          times. Leave blank to default to the entry script
+                          passed via the --entry key. Example usage: -E
+                          path/to/src/1.js -E path/to/src/2.js
   --useConfig, -c         Path to a JSON configuration file which sets default
                           options. If this option is set but no path is
                           provided, the path is assumed to be
@@ -166,14 +184,20 @@ Install webant locally:
 Then use webant as follows:
 
 ````javascript
-var webant = require("webant");
+var Webant = require("webant");
 
-webant(opts,function(err,data){
+var webant = new Webant(opts);
+
+webant.build(function(err,data){
 	if (err) {
 		// webant has encountered an error
 	} else {
-		// webant has written the compiled javascript successfully
-		console.log(data.numModules + " modules encountered and " + data.numFiles + " files were written.");
+		/**
+		 * webant has successfully compiled and written the source files. 
+		 */
+		console.log("SUCCESS!");
+		console.log("Data regarding what has been compiled:");
+		console.log(data);
 	}
 });
 ````
@@ -194,11 +218,6 @@ A wide variety of handlers are officially being maintained:
 * [LESS](https://github.com/theakman2/node-modules-webant-handler-less)
 * [SASS/SCSS](https://github.com/theakman2/node-modules-webant-handler-scss)
 * [Stylus](https://github.com/theakman2/node-modules-webant-handler-stylus)
-
-#### Javascript
-
-* CoffeeScript *(coming soon)*
-* TypeScript *(coming soon)*
 
 #### Templating
 
@@ -294,7 +313,7 @@ When you `require` a module asynchronously, webant intelligently tries to includ
 
 ### Well tested
 
-Webant is thoroughly tested with 200+ unit tests, most of which use a headless browser ([PhantomJS](http://phantomjs.org)) to ensure the module works in a browser environment as intended.
+Webant is thoroughly tested with 250+ unit tests, most of which use a headless browser ([PhantomJS](http://phantomjs.org)) to ensure the module works in a browser environment as intended.
 
 ## Dynamic requires
 
@@ -326,6 +345,136 @@ require([item1,item2]); // not allowed - will throw error
 ````
 
 Webant may be augmented to support dynamic requires in future. 
+
+## Advanced techniques
+
+### Multiple entry files
+
+It is possible for webant to compile source files from multiple entry files as follows:
+
+```javascript
+var Webant = require("webant");
+
+var opts = {
+	files:[{
+		entry:"/path/to/src/entry1.js",
+		dest:"/path/to/build/entry1.out.js"
+	},{
+		entry:"/path/to/src/entry2.js",
+		dest:"/path/to/build/entry2.out.js"
+	}]
+};
+
+var webant = new Webant(opts);
+
+webant.build(function(err,data){
+	// ...
+});
+```
+
+## Customising webant
+
+To understand how webant can be customised, it's important to understand how webant works.
+
+When you call `require("webant")` in your NodeJS code, you are getting the Webant class. To actually compile anything, you need to instantiate the Webant class and call the `build` method as follows:
+
+```javascript
+var Webant = require("webant");
+
+var webant = new Webant(opts);
+webant.build(function(err,data){
+	// ...
+});
+``` 
+
+When the `build` method is called, webant goes through five basic stages. Each of these stages is handled by a self-contained delegate class:
+
+1. Normalise and validate the `opts` argument passed via the constructor. This is handled by the `ConfigParser` class.
+2. Get a require tree representing which files require which other files. Handled by the `RequireTreeParser` class.
+3. From the require tree representation, get another representation of how many distinct files ('chunks') need to be generated. Handled by the `Chunker` class.
+4. From the chunked representation, get a representation of the final javascript code that needs to be saved. Handled by the `Stringifier` class.
+5. Finally, write the final stringified representation. This is handled by the `Writer` class. 
+
+The `ConfigParser`, `RequireTreeParser`, `Chunker`, `Stringifier` and `Writer` delegate classes are all accessible as properties on the main `Webant` class. For example:
+
+```javascript
+var Webant = require("webant");
+
+var Stringifier = Webant.Stringifier;
+var ConfigParser = Webant.ConfigParser;
+```
+
+Since the five delegate classes are publicly accessible as properties of the `Webant` class, it's easy to customise webant by re-defining these properties.
+
+For example, you could customise the way in which webant writes compiled files by re-defining `Webant.Writer` as follows:
+
+```javascript
+var Webant = require("webant");
+
+var Writer = Webant.Writer;
+
+function MyCustomWriter() {
+	Writer.apply(this,Array.prototype.slice.call(arguments));
+}
+
+MyCustomWriter.prototype = Object.create(Writer.prototype);
+
+MyCustomWriter.prototype.write = function(dataToWrite,callback) {
+	// my custom behaviour
+};
+
+Webant.Writer = MyCustomWriter;
+
+var webant = new Webant(opts);
+
+webant.build(function(err,data){
+	/**
+	 * Webant has compiled your source files using the `MyCustomWriter` class.
+	 */
+});
+```
+
+The example above affects all instances of Webant - i.e. it's a global change. It is however possible to customise only specific webant instances as follows:
+
+```javascript
+var Webant = require("webant");
+
+var Writer = Webant.Writer;
+
+function MyCustomWriter() {
+	Writer.apply(this,Array.prototype.slice.call(arguments));
+}
+
+MyCustomWriter.prototype = Object.create(Writer.prototype);
+
+MyCustomWriter.prototype.write = function(dataToWrite,callback) {
+	// my custom behaviour
+};
+
+var webant = new Webant(opts);
+
+webant.writer = new MyCustomWriter(webant);
+
+webant.build(function(err,data){
+	/**
+	 * This has been compiled using the `MyCustomWriter` class...
+	 */
+});
+
+var webant2 = new Webant(opts);
+
+webant2.build(function(err,data){
+	/**
+	 * ...but this has been compiled using the default `Writer` class.
+	 */
+});
+```
+
+This instance-specific example takes advantage of two features:
+
+1. Webant only instantiates the delegate classes when the `build` method is called.
+2. The instantiated delegate classes follow a naming convention - simple lower-case the class' name. In other words, the `Writer` class is instantiated and attached to the webant instance under the property `writer`.
+3. Delegate classes are always instantiated with the webant instance passed as the first parameter.
 
 ## Tests [![Build Status](https://travis-ci.org/theakman2/node-modules-webant.png?branch=master)](https://travis-ci.org/theakman2/node-modules-webant)
 

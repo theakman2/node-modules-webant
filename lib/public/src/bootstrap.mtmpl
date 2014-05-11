@@ -60,7 +60,8 @@
 		return missing;
 	};
 	<% } %>
-	function getExports(data) {
+	function getExports(data,cb) {
+		var ret;
 		if (typeof data[0] === "string") {
 			try {
 				var fn = window[<%=data.chunkGlobalVar%>].modules[data[0]][data[1]];
@@ -68,28 +69,34 @@
 				throw new Error("Module " + data + "not found."); 
 			}
 			if (fn.hasOwnProperty("__module")) {
-				return fn.__module.exports;
+				ret = fn.__module.exports;
+			} else {
+				var module;
+				var exports = {};
+				fn.__module = module = { exports: exports };
+				fn.call(
+					undefined,
+					<% if (data.isMultiChunk) { %>
+						require
+					<% } else { %>
+						getExports
+					<% } %>,
+					module,
+					exports
+				);
+				ret = module.exports;
 			}
-			var module;
-			var exports = {};
-			fn.__module = module = { exports: exports };
-			fn.call(
-				undefined,
-				<% if (data.isMultiChunk) { %>
-					require
-				<% } else { %>
-					getExports
-				<% } %>,
-				module,
-				exports
-			);
-			return module.exports;
+		} else {
+			ret = [];
+			for (var i = 0; i < data.length; i++) {
+				ret.push(getExports(data[i],cb));
+			}
 		}
-		var ret = [];
-		for (var i = 0; i < data.length; i++) {
-			ret.push(getExports(data[i]));
+		if (typeof cb === "function") {
+			cb.apply(undefined,typeof data[0] === "string" ? [ret] : ret);
+		} else {
+			return ret;
 		}
-		return ret;
 	};
 	window[<%=data.chunkGlobalVar%>] = window[<%=data.chunkGlobalVar%>] || {};
 	window[<%=data.chunkGlobalVar%>].modules = window[<%=data.chunkGlobalVar%>].modules || {};

@@ -364,7 +364,10 @@ test("parseConfig 9",function(t){
 	                 "--defaultExtension=.coffee",
 	                 "--postProcess",
 	                 "debug",
-	                 "--no-includeBootstrap"
+	                 "--no-includeBootstrap",
+	                 "--aliases.foo",
+	                 "bar",
+	                 "--aliases.baz=val"
 	                 ];
 	
 	var settings = parseConfig(rawConfig);
@@ -381,7 +384,10 @@ test("parseConfig 9",function(t){
 			postProcess:"debug",
 			requireBase:"",
 			defaultExtension:".coffee",
-			aliases:{},
+			aliases:{
+				foo:"bar",
+				baz:"val"
+			},
 			includeBootstrap:false,
 			browserGlobalVar:"__MODULES__",
 			entryModules:[path.resolve("/src/js/main.js")]
