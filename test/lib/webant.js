@@ -15,96 +15,48 @@ var phantomScript = path.join(baseDir,"phantomwebant.js");
 function doTest(opts,cb) {
 	var testName = "[" + opts.testId + "," + opts.testVariation + "]";
 	var t = opts.t;
-	fs.remove(opts.destDir,function(err){
-		if (err) {
-			t.fail("Build directory not cleared for webant test " + testName);
+	var webant = new Webant(opts.webantOpts);
+	go.webantTest(path.join(baseDir,opts.testId),webant,t,null,function(err,out,obj){
+		if (typeof opts.chunksExpected === "number") {
+			var expectedFiles = ["main.js"];
+			
+			for (var i = 1; i < opts.chunksExpected; i++) {
+				expectedFiles.push("main"+i+".js");
+			}
+			expectedFiles.sort();
+			var numChunksExpected = opts.chunksExpected;
+		} else {
+			var expectedFiles = opts.chunksExpected;
+			var numChunksExpected = opts.chunksExpected.length;
+		}
+		
+		if (out.length !== numChunksExpected) {
+			t.fail("Webant output does not match expected chunk count for webant test " + testName);
 			t.end();
 			return;
 		}
-		fs.exists(opts.destDir,function(exists){
-			if (exists) {
-				t.fail("Build directory not cleared for webant test " + testName);
+		
+		fs.readdir(opts.destDir,function(err3,files){
+			if (err3) {
+				t.fail("Could not read newly created build files for webant test " + testName + ": " + err3);
 				t.end();
 				return;
 			}
-			(new Webant(opts.webantOpts)).build(function(err2,out){
-				if (err2) {
-					t.fail("Error encountered while compiling webant test " + testName + ": " + err2);
-					t.end();
-					return;
-				}
-				
-				if (typeof opts.chunksExpected === "number") {
-					var expectedFiles = ["main.js"];
-					
-					for (var i = 1; i < opts.chunksExpected; i++) {
-						expectedFiles.push("main"+i+".js");
-					}
-					expectedFiles.sort();
-					var numChunksExpected = opts.chunksExpected;
-				} else {
-					var expectedFiles = opts.chunksExpected;
-					var numChunksExpected = opts.chunksExpected.length;
-				}
-				
-				if (out.length !== numChunksExpected) {
-					t.fail("Webant output does not match expected chunk count for webant test " + testName);
-					t.end();
-					return;
-				}
-				
-				fs.readdir(opts.destDir,function(err3,files){
-					if (err3) {
-						t.fail("Could not read newly created build files for webant test " + testName + ": " + err3);
-						t.end();
-						return;
-					}
-					
-					if (!files && !files.length) {
-						t.fail("No files created for webant test " + testName);
-						t.end();
-						return;
-					}
-					
-					files.sort();
-					
-					t.equivalent(
-						files,
-						expectedFiles,
-						"Files should match expected files for webant test " + testName
-					);
-					
-					var pjs = childProcess.exec(
-						'phantomjs ' + shellEscape([phantomScript]),
-						{
-							cwd:path.join(baseDir,opts.testId),
-							maxBuffer:1024*1024
-						},
-						function(err4,stdout,stderr) {
-							pjs.kill();
-							if (err4) {
-								t.fail("phantomjs reports an error: " + err4);
-								t.end();
-								return;
-							}
-							if (stderr) {
-								t.fail("phantomjs reports content in stderror: " + stderr);
-								t.end();
-								return;
-							}
-							var obj;
-							try {
-								obj = JSON.parse(stdout.trim());
-							} catch(e) {
-								t.fail("Could not JSON.parse() stdout for webant test " + testName + " [stdout is: " + stdout + "]");
-								t.end();
-								return;
-							}
-							opts.onTest(obj,opts,cb);
-						}
-					);
-				});
-			});
+			
+			if (!files && !files.length) {
+				t.fail("No files created for webant test " + testName);
+				t.end();
+				return;
+			}
+			
+			files.sort();
+			
+			t.equivalent(
+				files,
+				expectedFiles,
+				"Files should match expected files for webant test " + testName
+			);
+			opts.onTest(obj,opts,cb);
 		});
 	});
 }
@@ -168,5 +120,69 @@ function go(testId,chunksExpected,additionalOpts,onTest) {
 		});
 	});
 }
+
+go.phantom = function(cwd,cb) {
+	var pjs = childProcess.exec(
+		'phantomjs ' + shellEscape([phantomScript]),
+		{
+			cwd:cwd,
+			maxBuffer:1024*1024
+		},
+		function(err4,stdout,stderr) {
+			pjs.kill();
+			if (err4) {
+				cb("phantomjs reports an error: " + err4);
+				return;
+			}
+			if (stderr) {
+				cb("phantomjs reports content in stderror: " + stderr);
+				return;
+			}
+			var obj;
+			try {
+				obj = JSON.parse(stdout.trim());
+			} catch(e) {
+				cb("Could not JSON.parse() stdout for webant test [stdout is: " + stdout + "]");
+				return;
+			}
+			cb(null,obj);
+		}
+	);
+};
+
+go.webantTest = function(dest,webant,t,equiv,cb) {
+	fs.remove(path.join(dest,"build","js"),function(err){
+		if (err) {
+			t.fail("Build directory not cleared: " + err);
+			t.end();
+			return;
+		}
+		fs.exists(path.join(dest,"build","js"),function(exists){
+			if (exists) {
+				t.fail("Build directory not cleared.");
+				t.end();
+				return;
+			}
+			webant.build(function(err2,out){
+				if (err2) {
+					t.fail("Error encountered while compiling webant test: " + err2);
+					t.end();
+					return;
+				}
+				go.phantom(dest,function(err4,obj){
+					if (err4) {
+						t.fail(err4);
+						t.end();
+						return;
+					}
+					if (equiv !== null) {
+						t.equivalent(obj,equiv);
+					}
+					cb(null,out,obj);
+				});
+			});
+		});
+	});
+};
 
 module.exports = go;
