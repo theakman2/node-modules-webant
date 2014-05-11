@@ -8,7 +8,9 @@ var ConfigParser = require("../../lib/ConfigParser.js");
 var jsHandler = require("../../lib/util/jsHandler.js");
 
 function parseConfig(config) {
-	return (new ConfigParser(new Webant(config))).parse();
+	var webant = new Webant(config);
+	webant.parseConfig();
+	return webant.settings;
 }
 
 test("parseConfig 1",function(t){
@@ -44,15 +46,18 @@ test("parseConfig 2",function(t){
 	t.equivalent(
 		settings,
 		{
-			entry:path.resolve("/path/to/src/js/main.js"),
-			dest:path.resolve("/path/to/build/main.out.js"),
-			urlDest:"main.out.js",
+			files:[{
+				entry:path.resolve("/path/to/src/js/main.js"),
+				dest:path.resolve("/path/to/build/main.out.js"),
+				urlDest:"main.out.js",
+			}],
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
 			aliases:{},
-			includeBootstrap:true,
-			browserGlobalVar:"__CHUNKS__"
+			includeBootstrap:path.resolve("/path/to/src/js/main.js"),
+			browserGlobalVar:"__MODULES__",
+			entryModules:[path.resolve("/path/to/src/js/main.js")]
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -80,15 +85,18 @@ test("parseConfig 3",function(t){
 	t.equivalent(
 		settings,
 		{
-			entry:path.resolve("/path/to/src/js/main.js"),
-			dest:path.resolve("/path/to/src/js/main.out.js"),
-			urlDest:"main.out.js",
+			files:[{
+				entry:path.resolve("/path/to/src/js/main.js"),
+				dest:path.resolve("/path/to/src/js/main.out.js"),
+				urlDest:"main.out.js",
+			}],
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
 			aliases:{},
-			includeBootstrap:true,
-			browserGlobalVar:"__CHUNKS__"
+			includeBootstrap:path.resolve("/path/to/src/js/main.js"),
+			browserGlobalVar:"__MODULES__",
+			entryModules:[path.resolve("/path/to/src/js/main.js")]
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -141,15 +149,18 @@ test("parseConfig 4",function(t){
 	t.equivalent(
 		settings,
 		{
-			entry:path.resolve("/path/to/src/js/main.js"),
-			dest:path.resolve("/path/to/src/js/main.out.js"),
-			urlDest:"foo",
+			files:[{
+				entry:path.resolve("/path/to/src/js/main.js"),
+				dest:path.resolve("/path/to/src/js/main.out.js"),
+				urlDest:"foo",
+			}],
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
 		    aliases:{},
-			includeBootstrap:true,
-			browserGlobalVar:"__CHUNKS__"
+			includeBootstrap:path.resolve("/path/to/src/js/main.js"),
+			browserGlobalVar:"__MODULES__",
+			entryModules:[path.resolve("/path/to/src/js/main.js")]
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -217,9 +228,11 @@ test("parseConfig 5",function(t){
 	t.equivalent(
 		settings,
 		{
-			entry:path.resolve("/path/to/src/js/main.js"),
-			dest:path.resolve("/path/to/src/js/main.out.js"),
-			urlDest:"foo",
+			files:[{
+				entry:path.resolve("/path/to/src/js/main.js"),
+				dest:path.resolve("/path/to/src/js/main.out.js"),
+				urlDest:"foo",
+			}],
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
@@ -230,8 +243,9 @@ test("parseConfig 5",function(t){
 				">>d":"/overrides/d",
 				">>mypersonalalias":"/so/many/paths"
 			},
-			includeBootstrap:true,
-			browserGlobalVar:"__CHUNKS__"
+			includeBootstrap:path.resolve("/path/to/src/js/main.js"),
+			browserGlobalVar:"__MODULES__",
+			entryModules:[path.resolve("/path/to/src/js/main.js")]
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -294,15 +308,18 @@ test("parseConfig 7",function(t) {
 	t.equivalent(
 		settings,
 		{
-			entry:path.resolve("/path/to/src/js/main.js"),
-			dest:path.resolve("/path/to/src/js/main.out.js"),
-			urlDest:"main.out.js",
+			files:[{
+				entry:path.resolve("/path/to/src/js/main.js"),
+				dest:path.resolve("/path/to/src/js/main.out.js"),
+				urlDest:"main.out.js",
+			}],
 			postProcess:"none",
 			requireBase:process.cwd(),
 			defaultExtension:".js",
 			aliases:{},
-			includeBootstrap:true,
-			browserGlobalVar:"__CHUNKS__"
+			includeBootstrap:path.resolve("/path/to/src/js/main.js"),
+			browserGlobalVar:"__MODULES__",
+			entryModules:[path.resolve("/path/to/src/js/main.js")]
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -321,15 +338,18 @@ test("parseConfig 8",function(t) {
 	t.equivalent(
 		settings,
 		{
-			entry:path.resolve("/src/js/main.js"),
-			dest:path.resolve("/src/js/main.out.js"),
-			urlDest:"main.out.js",
+			files:[{
+				entry:path.resolve("/src/js/main.js"),
+				dest:path.resolve("/src/js/main.out.js"),
+				urlDest:"main.out.js",
+			}],
 			postProcess:"none",
 			requireBase:"",
 			defaultExtension:".coffee",
 			aliases:{},
-			includeBootstrap:true,
-			browserGlobalVar:"__CHUNKS__"
+			includeBootstrap:path.resolve("/src/js/main.js"),
+			browserGlobalVar:"__MODULES__",
+			entryModules:[path.resolve("/src/js/main.js")]
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -353,15 +373,18 @@ test("parseConfig 9",function(t){
 	t.equivalent(
 		settings,
 		{
-			entry:path.resolve("/src/js/main.js"),
-			dest:path.resolve("/src/js/main.out.js"),
-			urlDest:"main.out.js",
+			files:[{
+				entry:path.resolve("/src/js/main.js"),
+				dest:path.resolve("/src/js/main.out.js"),
+				urlDest:"main.out.js",
+			}],
 			postProcess:"debug",
 			requireBase:"",
 			defaultExtension:".coffee",
 			aliases:{},
 			includeBootstrap:false,
-			browserGlobalVar:"__CHUNKS__"
+			browserGlobalVar:"__MODULES__",
+			entryModules:[path.resolve("/src/js/main.js")]
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -385,16 +408,18 @@ test("parseConfig 10",function(t){
 	t.equivalent(
 		settings,
 		{
-			entry:path.join(__dirname,"nested","foo","bar","baz.js"),
-			dest:path.join(__dirname,"nested","foo","baz","out.js"),
-			urlDest:"out.js",
+			files:[{
+				entry:path.join(__dirname,"nested","foo","bar","baz.js"),
+				dest:path.join(__dirname,"nested","foo","baz","out.js"),
+				urlDest:"out.js",
+			}],
 			postProcess:"compress",
 			requireBase:"",
 			defaultExtension:".ts",
 			aliases:{},
-			useConfig:configFile,
-			includeBootstrap:true,
-			browserGlobalVar:"__CHUNKS__"
+			includeBootstrap:path.join(__dirname,"nested","foo","bar","baz.js"),
+			browserGlobalVar:"__MODULES__",
+			entryModules:[path.join(__dirname,"nested","foo","bar","baz.js")]
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -410,15 +435,18 @@ test("parseConfig 11",function(t){
 	t.equivalent(
 		settings,
 		{
-			entry:path.resolve("/path/to/src/js/main.js"),
-			dest:path.resolve("/path/to/src/js/main.out.js"),
-			urlDest:"main.out.js",
+			files:[{
+				entry:path.resolve("/path/to/src/js/main.js"),
+				dest:path.resolve("/path/to/src/js/main.out.js"),
+				urlDest:"main.out.js",
+			}],
 			postProcess:"none",
 			defaultExtension:".js",
 			requireBase:"",
 			aliases:{},
-			includeBootstrap:true,
-			browserGlobalVar:"__CHUNKS__"
+			includeBootstrap:path.resolve("/path/to/src/js/main.js"),
+			browserGlobalVar:"__MODULES__",
+			entryModules:[path.resolve("/path/to/src/js/main.js")]
 		},
 		"Defaults should have been merged in properly."
 	);
@@ -431,7 +459,11 @@ test("parseConfig 12",function(t) {
 	    entry:"/src/js/main.js",
 	    defaultExtension:".coffee",
 	    includeBootstrap:false,
-	    browserGlobalVar:"foo"
+	    browserGlobalVar:"foo",
+	    entryModules:["foo/bar.js","baz/boosh.js"],
+	    files:[{
+	    	entry:"/src/js/contact.js"
+	    }]
 	};
 	
 	var settings = parseConfig(rawConfig);
@@ -439,15 +471,22 @@ test("parseConfig 12",function(t) {
 	t.equivalent(
 		settings,
 		{
-			entry:path.resolve("/src/js/main.js"),
-			dest:path.resolve("/src/js/main.out.js"),
-			urlDest:"main.out.js",
+			files:[{
+				entry:path.resolve("/src/js/main.js"),
+				dest:path.resolve("/src/js/main.out.js"),
+				urlDest:"main.out.js",
+			},{
+				entry:path.resolve("/src/js/contact.js"),
+				dest:path.resolve("/src/js/contact.out.js"),
+				urlDest:"contact.out.js"
+			}],
 			postProcess:"none",
 			requireBase:"",
 			defaultExtension:".coffee",
 			aliases:{},
 			includeBootstrap:false,
-			browserGlobalVar:"foo"
+			browserGlobalVar:"foo",
+			entryModules:[path.resolve("foo/bar.js"),path.resolve("baz/boosh.js")]
 		},
 		"Defaults should have been merged in properly."
 	);

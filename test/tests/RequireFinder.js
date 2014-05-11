@@ -1,9 +1,27 @@
+var path = require("path");
+
 var test = require("tap").test;
 var uglify = require("uglify-js");
 
-var getRequires = require("../../lib/RequireTreeParser.js").prototype.getRequires;
+var Webant = require("../../lib/Webant.js");
+var RequireTreeParser = require("../../lib/RequireTreeParser.js");
+var RequireFinder = require("../../lib/RequireFinder.js");
 
-test("getRequires 1",function(t){
+var dir = path.resolve("path/to");
+var file = "entry.js";
+
+var entry = dir + path.sep + file;
+
+var webant = new Webant({
+	entry:entry
+});
+
+webant.parseConfig();
+
+var requireTreeParser = new RequireTreeParser(webant);
+var requireFinder = new RequireFinder(requireTreeParser);
+
+test("RequireFinder 1",function(t){
 	var contents = [
 	                "require()",
 	                "require('foo'+'.js')",
@@ -32,43 +50,102 @@ test("getRequires 1",function(t){
 	                "require(['sdfs',foo],function(){})",
 	                ];
 	
-	contents.forEach(function(c){
+	contents.forEach(function(c,i){
 		t.throws(function(){
-			getRequires(uglify.parse(c));
-		});
+			requireFinder.find(uglify.parse(c),entry);
+		},"Require statement at index " + i + " should throw.");
 	});
 	
 	t.end();
 });
 
-test("getRequires 2",function(t){
+test("RequireFinder 1",function(t){
 	var ast = uglify.parse(
 		"require('a');" +
-		"require('b',function(){});" +
+		"require('b|sameAsChunk={entry}',function(){});" +
 		"require(['c']);" +
-		"require(['d','e']);" +
+		"require(['d|come=on','e|foo=bar']);" +
 		"require(['f'],function(){});" +
-		"require(['g','h'],function(){});"
+		"require(['g|test|key=val|foo=','h'],function(){});" +
+		"require('i',function(){});" +
+		"require('a|sameAsChunk=');" +
+		"require('b|sameAsChunk={curr}',function(){})"
 	);
 	
-	var requires = getRequires(ast).map(function(r){
+	var requires = requireFinder.find(ast,entry).map(function(el){
 		return {
-			v:r.value,
-			t:r.type
+			filePath:el.filePath,
+			params:el.params
 		};
 	});
 	
 	t.equivalent(
 		requires,
 		[
-		 {v:"a",t:"sync"},
-		 {v:"b",t:"async"},
-		 {v:"c",t:"sync"},
-		 {v:"d",t:"sync"},
-		 {v:"e",t:"sync"},
-		 {v:"f",t:"async"},
-		 {v:"g",t:"async"},
-		 {v:"h",t:"async"}
+		 {
+			 filePath:dir + path.sep + "a.js",
+			 params:{
+				 sameAsChunk:entry
+			 }
+		 },
+		 {
+			 filePath:dir + path.sep + "b.js",
+			 params:{
+				 sameAsChunk:entry
+			 }
+		 },
+		 {
+			 filePath:dir + path.sep + "c.js",
+			 params:{
+				 sameAsChunk:entry
+			 }
+		 },
+		 {
+			 filePath:dir + path.sep + "d.js",
+			 params:{
+				 sameAsChunk:entry,
+				 come:"on"
+			 }
+		 },
+		 {
+			 filePath:dir + path.sep + "e.js",
+			 params:{
+				 sameAsChunk:entry,
+				 foo:"bar"
+			 }
+		 },
+		 {
+			 filePath:dir + path.sep + "f.js",
+			 params:{}
+		 },
+		 {
+			 filePath:dir + path.sep + "g.js",
+			 params:{
+				 test:null,
+				 key:"val",
+				 foo:""
+			 }
+		 },
+		 {
+			 filePath:dir + path.sep + "h.js",
+			 params:{}
+		 },
+		 {
+			 filePath:dir + path.sep + "i.js",
+			 params:{}
+		 },
+		 {
+			 filePath:dir + path.sep + "a.js",
+			 params:{
+				 sameAsChunk:""
+			 }
+		 },
+		 {
+			 filePath:dir + path.sep + "b.js",
+			 params:{
+				 sameAsChunk:entry
+			 }
+		 }
 		 ]
 	);
 	
