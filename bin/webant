@@ -21,10 +21,10 @@ if (!args.entry && !args.useConfig) {
 	process.exit(1);
 }
 
-var webant = require("../lib/webant");
+var Webant = require("../lib/webant");
 
 console.log("Compilation beginning");
-webant(process.argv.slice(2),function(err){
+(new Webant(process.argv.slice(2))).build(function(err){
 	if (err) {
 		console.error("Compilation unsuccessful");
 		throw err;
