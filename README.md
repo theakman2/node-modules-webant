@@ -107,55 +107,62 @@ Example:
   webant --entry src/js/main.js --dest build/js/main.js
 
 Options:
-  --entry, -e             Path to entry script relative to current directory.
-                          [Required, unless --useConfig flag is set].
-  --dest, -d              Path to where compiled output will be written.
-  --urlDest, -u           URL at which the path specified for '--dest' can be
-                          reached. Can be absolute or relative. Example:
-                          --urlDest js/main.js
-  --postProcess, -p       Post-processing to apply to compiled javascript. Can
-                          be either 'compress' (compresses output), 'debug'
-                          (adds file and line numbers to output) or 'none' (no
-                          post-processing).
-  --requireBase, -r       Resolve require paths relative to the supplied
-                          directory instead of relative to the file containing
-                          the require.
-  --defaultExtension, -D  Default extension to append to a require path when no
-                          extension is provided. Include the starting period
-                          (e.g. '.ts'). Example: setting `--defaultExtension
-                          .coffee` would mean that `require('./path/to/file')`
-                          would look for `./path/to/file.coffee`. Defaults to
-                          '.js'.
-  --handlers, -H          Additional handlers to use. Can be set multiple
-                          times. Example: -H coffee -H scss -H json
-  --includeBootstrap, -i  The path to the file where the bootstrap code will be
-                          included. This should be set to one of the source
-                          files to be compiled. Webant will then insert the
-                          bootstrap code into the compiled version of the
-                          specified source file. Alternatively set this to the
-                          empty string for no bootstrap code to be included.
-                          Leave undefined for the bootstrap code to be included
-                          in the entry file specified via the `--entry` key.
-  --browserGlobalVar, -b  Name of the global variable used in the compiled
-                          javascript. Defaults to '__MODULES__'.
-  --aliases               Parameters that can be used as part of `require`
-                          calls. Example: passing `--aliases.foo=jquery
-                          --aliases.baz=lib` would mean you could do
-                          `require('../{baz}/{foo}.js')` in your scripts.
-  --entryModules, -E      Path to entry modules. These are the modules that are
-                          automatically loaded when the compiled javascript is
-                          included in a webpage. This can be set multiple
-                          times. Leave blank to default to the entry script
-                          passed via the --entry key. Example usage: -E
-                          path/to/src/1.js -E path/to/src/2.js
-  --useConfig, -c         Path to a JSON configuration file which sets default
-                          options. If this option is set but no path is
-                          provided, the path is assumed to be
-                          './webant-config.json'. [Required, unless --entry
-                          option is provided]. [Additional options override
-                          those found in the configuration file].
-  --version, -v           Show version.
-  --help, -h              Show help.
+  --entry, -e                  Path to entry script relative to current
+                               directory. [Required, unless --useConfig flag is
+                               set].
+  --dest, -d                   Path to where compiled output will be written.
+  --urlDest, -u                URL at which the path specified for '--dest' can
+                               be reached. Can be absolute or relative.
+                               Example: --urlDest js/main.js
+  --postProcess, -p            Post-processing to apply to compiled javascript.
+                               Can be either 'compress' (compresses output),
+                               'debug' (adds file and line numbers to output)
+                               or 'none' (no post-processing).
+  --requireBase, -r            Resolve require paths relative to the supplied
+                               directory instead of relative to the file
+                               containing the require.
+  --defaultExtension, -D       Default extension to append to a require path
+                               when no extension is provided. Include the
+                               starting period (e.g. '.ts'). Example: setting
+                               `--defaultExtension .coffee` would mean that
+                               `require('./path/to/file')` would look for
+                               `./path/to/file.coffee`. Defaults to '.js'.
+  --handlers, -H               Additional handlers to use. Can be set multiple
+                               times. Example: -H coffee -H scss -H json
+  --includeBootstrap, -i       The path to the file where the bootstrap code
+                               will be included. This should be set to one of
+                               the source files to be compiled. Webant will
+                               then insert the bootstrap code into the compiled
+                               version of the specified source file.
+                               Alternatively set this to the empty string for
+                               no bootstrap code to be included. Leave
+                               undefined for the bootstrap code to be included
+                               in the entry file specified via the `--entry`
+                               key.
+  --browserGlobalVar, -b       Name of the global variable used in the compiled
+                               javascript. Defaults to '__MODULES__'.
+  --aliases                    Parameters that can be used as part of `require`
+                               calls. Example: passing `--aliases.foo=jquery
+                               --aliases.baz=lib` would mean you could do
+                               `require('../{baz}/{foo}.js')` in your scripts.
+  --entryModules, -E           Path to entry modules. These are the modules
+                               that are automatically loaded when the compiled
+                               javascript is included in a webpage. This can be
+                               set multiple times. Leave blank to default to
+                               the entry script passed via the --entry key.
+                               Example usage: -E path/to/src/1.js -E
+                               path/to/src/2.js
+  --requireExpressionName, -R  Name of the function used for requiring
+                               javascript files. Defaults to 'require'.
+  --useConfig, -c              Path to a JSON configuration file which sets
+                               default options. If this option is set but no
+                               path is provided, the path is assumed to be
+                               './webant-config.json'. [Required, unless
+                               --entry option is provided]. [Additional options
+                               override those found in the configuration file].
+
+  --version, -v                Show version.
+  --help, -h                   Show help.
 ```
 
 ### Configuration file settings

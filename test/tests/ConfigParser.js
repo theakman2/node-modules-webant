@@ -57,6 +57,7 @@ test("parseConfig 2",function(t){
 			aliases:{},
 			includeBootstrap:path.resolve("/path/to/src/js/main.js"),
 			browserGlobalVar:"__MODULES__",
+			requireExpressionName:"require",
 			entryModules:[path.resolve("/path/to/src/js/main.js")]
 		},
 		"Defaults should have been merged in properly."
@@ -96,6 +97,7 @@ test("parseConfig 3",function(t){
 			aliases:{},
 			includeBootstrap:path.resolve("/path/to/src/js/main.js"),
 			browserGlobalVar:"__MODULES__",
+			requireExpressionName:"require",
 			entryModules:[path.resolve("/path/to/src/js/main.js")]
 		},
 		"Defaults should have been merged in properly."
@@ -160,6 +162,7 @@ test("parseConfig 4",function(t){
 		    aliases:{},
 			includeBootstrap:path.resolve("/path/to/src/js/main.js"),
 			browserGlobalVar:"__MODULES__",
+			requireExpressionName:"require",
 			entryModules:[path.resolve("/path/to/src/js/main.js")]
 		},
 		"Defaults should have been merged in properly."
@@ -245,6 +248,7 @@ test("parseConfig 5",function(t){
 			},
 			includeBootstrap:path.resolve("/path/to/src/js/main.js"),
 			browserGlobalVar:"__MODULES__",
+			requireExpressionName:"require",
 			entryModules:[path.resolve("/path/to/src/js/main.js")]
 		},
 		"Defaults should have been merged in properly."
@@ -319,6 +323,7 @@ test("parseConfig 7",function(t) {
 			aliases:{},
 			includeBootstrap:path.resolve("/path/to/src/js/main.js"),
 			browserGlobalVar:"__MODULES__",
+			requireExpressionName:"require",
 			entryModules:[path.resolve("/path/to/src/js/main.js")]
 		},
 		"Defaults should have been merged in properly."
@@ -349,6 +354,7 @@ test("parseConfig 8",function(t) {
 			aliases:{},
 			includeBootstrap:path.resolve("/src/js/main.js"),
 			browserGlobalVar:"__MODULES__",
+			requireExpressionName:"require",
 			entryModules:[path.resolve("/src/js/main.js")]
 		},
 		"Defaults should have been merged in properly."
@@ -367,7 +373,8 @@ test("parseConfig 9",function(t){
 	                 "--no-includeBootstrap",
 	                 "--aliases.foo",
 	                 "bar",
-	                 "--aliases.baz=val"
+	                 "--aliases.baz=val",
+	                 "--requireExpressionName=bar"
 	                 ];
 	
 	var settings = parseConfig(rawConfig);
@@ -390,6 +397,7 @@ test("parseConfig 9",function(t){
 			},
 			includeBootstrap:false,
 			browserGlobalVar:"__MODULES__",
+			requireExpressionName:"bar",
 			entryModules:[path.resolve("/src/js/main.js")]
 		},
 		"Defaults should have been merged in properly."
@@ -425,6 +433,7 @@ test("parseConfig 10",function(t){
 			aliases:{},
 			includeBootstrap:path.join(__dirname,"nested","foo","bar","baz.js"),
 			browserGlobalVar:"__MODULES__",
+			requireExpressionName:"require",
 			entryModules:[path.join(__dirname,"nested","foo","bar","baz.js")]
 		},
 		"Defaults should have been merged in properly."
@@ -452,6 +461,7 @@ test("parseConfig 11",function(t){
 			aliases:{},
 			includeBootstrap:path.resolve("/path/to/src/js/main.js"),
 			browserGlobalVar:"__MODULES__",
+			requireExpressionName:"require",
 			entryModules:[path.resolve("/path/to/src/js/main.js")]
 		},
 		"Defaults should have been merged in properly."
@@ -469,7 +479,8 @@ test("parseConfig 12",function(t) {
 	    entryModules:["foo/bar.js","baz/boosh.js"],
 	    files:[{
 	    	entry:"/src/js/contact.js"
-	    }]
+	    }],
+	    requireExpressionName:"foobar",
 	};
 	
 	var settings = parseConfig(rawConfig);
@@ -492,6 +503,7 @@ test("parseConfig 12",function(t) {
 			aliases:{},
 			includeBootstrap:false,
 			browserGlobalVar:"foo",
+			requireExpressionName:"foobar",
 			entryModules:[path.resolve("foo/bar.js"),path.resolve("baz/boosh.js")]
 		},
 		"Defaults should have been merged in properly."
